@@ -1,0 +1,652 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.4
+-- Dumped by pg_dump version 10.4
+
+-- Started on 2018-05-31 15:43:49
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12924)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2865 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 204 (class 1259 OID 19374)
+-- Name: country; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.country (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.country OWNER TO contractsappuser;
+
+--
+-- TOC entry 197 (class 1259 OID 19314)
+-- Name: databasechangelog; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.databasechangelog (
+    id character varying(255) NOT NULL,
+    author character varying(255) NOT NULL,
+    filename character varying(255) NOT NULL,
+    dateexecuted timestamp without time zone NOT NULL,
+    orderexecuted integer NOT NULL,
+    exectype character varying(10) NOT NULL,
+    md5sum character varying(35),
+    description character varying(255),
+    comments character varying(255),
+    tag character varying(255),
+    liquibase character varying(20),
+    contexts character varying(255),
+    labels character varying(255),
+    deployment_id character varying(10)
+);
+
+
+ALTER TABLE public.databasechangelog OWNER TO contractsappuser;
+
+--
+-- TOC entry 196 (class 1259 OID 19309)
+-- Name: databasechangeloglock; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.databasechangeloglock (
+    id integer NOT NULL,
+    locked boolean NOT NULL,
+    lockgranted timestamp without time zone,
+    lockedby character varying(255)
+);
+
+
+ALTER TABLE public.databasechangeloglock OWNER TO contractsappuser;
+
+--
+-- TOC entry 198 (class 1259 OID 19320)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: contractsappuser
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1000
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO contractsappuser;
+
+--
+-- TOC entry 200 (class 1259 OID 19337)
+-- Name: jhi_authority; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.jhi_authority (
+    name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.jhi_authority OWNER TO contractsappuser;
+
+--
+-- TOC entry 202 (class 1259 OID 19357)
+-- Name: jhi_persistent_audit_event; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.jhi_persistent_audit_event (
+    event_id bigint NOT NULL,
+    principal character varying(50) NOT NULL,
+    event_date timestamp without time zone,
+    event_type character varying(255)
+);
+
+
+ALTER TABLE public.jhi_persistent_audit_event OWNER TO contractsappuser;
+
+--
+-- TOC entry 203 (class 1259 OID 19362)
+-- Name: jhi_persistent_audit_evt_data; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.jhi_persistent_audit_evt_data (
+    event_id bigint NOT NULL,
+    name character varying(150) NOT NULL,
+    value character varying(255)
+);
+
+
+ALTER TABLE public.jhi_persistent_audit_evt_data OWNER TO contractsappuser;
+
+--
+-- TOC entry 199 (class 1259 OID 19322)
+-- Name: jhi_user; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.jhi_user (
+    id bigint NOT NULL,
+    login character varying(50) NOT NULL,
+    password_hash character varying(60),
+    first_name character varying(50),
+    last_name character varying(50),
+    email character varying(100),
+    image_url character varying(256),
+    activated boolean NOT NULL,
+    lang_key character varying(6),
+    activation_key character varying(20),
+    reset_key character varying(20),
+    created_by character varying(50) NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    reset_date timestamp without time zone,
+    last_modified_by character varying(50),
+    last_modified_date timestamp without time zone
+);
+
+
+ALTER TABLE public.jhi_user OWNER TO contractsappuser;
+
+--
+-- TOC entry 201 (class 1259 OID 19342)
+-- Name: jhi_user_authority; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.jhi_user_authority (
+    user_id bigint NOT NULL,
+    authority_name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.jhi_user_authority OWNER TO contractsappuser;
+
+--
+-- TOC entry 2857 (class 0 OID 19374)
+-- Dependencies: 204
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.country (id, name) FROM stdin;
+1	Afganistán
+2	Albania
+3	Alemania
+4	Andorra
+5	Angola
+6	Antigua y Barbuda
+7	Arabia Saudita
+8	Argelia
+9	Argentina
+10	Armenia
+11	Australia
+12	Austria
+13	Azerbaiyán
+14	Bahamas
+15	Bangladés
+16	Barbados
+17	Baréin
+18	Bélgica
+19	Belice
+20	Benín
+21	Bielorrusia
+22	Birmania
+23	Bolivia
+24	Bosnia y Herzegovina
+25	Botsuana
+26	Brasil
+27	Brunéi
+28	Bulgaria
+29	Burkina Faso
+30	Burundi
+31	Bután
+32	Cabo Verde
+33	Camboya
+34	Camerún
+35	Canadá
+36	Catar
+37	Chad
+38	Chile
+39	China
+40	Chipre
+41	Ciudad del Vaticano
+42	Colombia
+43	Comoras
+44	Corea del Norte
+45	Corea del Sur
+46	Costa de Marfil
+47	Costa Rica
+48	Croacia
+49	Cuba
+50	Dinamarca
+51	Dominica
+52	Ecuador
+53	Egipto
+54	El Salvador
+55	Emiratos Árabes Unidos
+56	Eritrea
+57	Eslovaquia
+58	Eslovenia
+59	España
+60	Estados Unidos
+61	Estonia
+62	Etiopía
+63	Filipinas
+64	Finlandia
+65	Fiyi
+66	Francia
+67	Gabón
+68	Gambia
+69	Georgia
+70	Ghana
+71	Granada
+72	Grecia
+73	Guatemala
+74	Guyana
+75	Guinea
+76	Guinea ecuatorial
+77	Guinea-Bisáu
+78	Haití
+79	Honduras
+80	Hungría
+81	India
+82	Indonesia
+83	Irak
+84	Irán
+85	Irlanda
+86	Islandia
+87	Islas Marshall
+88	Islas Salomón
+89	Israel
+90	Italia
+91	Jamaica
+92	Japón
+93	Jordania
+94	Kazajistán
+95	Kenia
+96	Kirguistán
+97	Kiribati
+98	Kuwait
+99	Laos
+100	Lesoto
+101	Letonia
+102	Líbano
+103	Liberia
+104	Libia
+105	Liechtenstein
+106	Lituania
+107	Luxemburgo
+108	Madagascar
+109	Malasia
+110	Malaui
+111	Maldivas
+112	Malí
+113	Malta
+114	Marruecos
+115	Mauricio
+116	Mauritania
+117	México
+118	Micronesia
+119	Moldavia
+120	Mónaco
+121	Mongolia
+122	Montenegro
+123	Mozambique
+124	Namibia
+125	Nauru
+126	Nepal
+127	Nicaragua
+128	Níger
+129	Nigeria
+130	Noruega
+131	Nueva Zelanda
+132	Omán
+133	Países Bajos
+134	Pakistán
+135	Palaos
+136	Panamá
+137	Papúa Nueva Guinea
+138	Paraguay
+139	Perú
+140	Polonia
+141	Portugal
+142	Reino Unido
+143	República Centroafricana
+144	República Checa
+145	República de Macedonia
+146	República del Congo
+147	República Democrática del Congo
+148	República Dominicana
+149	República Sudafricana
+150	Ruanda
+151	Rumanía
+152	Rusia
+153	Samoa
+154	San Cristóbal y Nieves
+155	San Marino
+156	San Vicente y las Granadinas
+157	Santa Lucía
+158	Santo Tomé y Príncipe
+159	Senegal
+160	Serbia
+161	Seychelles
+162	Sierra Leona
+163	Singapur
+164	Siria
+165	Somalia
+166	Sri Lanka
+167	Suazilandia
+168	Sudán
+169	Sudán del Sur
+170	Suecia
+171	Suiza
+172	Surinam
+173	Tailandia
+174	Tanzania
+175	Tayikistán
+176	Timor Oriental
+177	Togo
+178	Tonga
+179	Trinidad y Tobago
+180	Túnez
+181	Turkmenistán
+182	Turquía
+183	Tuvalu
+184	Ucrania
+185	Uganda
+186	Uruguay
+187	Uzbekistán
+188	Vanuatu
+189	Venezuela
+190	Vietnam
+191	Yemen
+192	Yibuti
+193	Zambia
+194	Zimbabue
+\.
+
+
+--
+-- TOC entry 2850 (class 0 OID 19314)
+-- Dependencies: 197
+-- Data for Name: databasechangelog; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.databasechangelog (id, author, filename, dateexecuted, orderexecuted, exectype, md5sum, description, comments, tag, liquibase, contexts, labels, deployment_id) FROM stdin;
+00000000000000	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-05-31 13:33:09.050802	1	EXECUTED	7:a6235f40597a13436aa36c6d61db2269	createSequence sequenceName=hibernate_sequence		\N	3.5.4	\N	\N	7791588998
+00000000000001	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-05-31 13:33:09.547588	2	EXECUTED	7:52839c39ca98b24936251e7ab4eb10bb	createTable tableName=jhi_user; createIndex indexName=idx_user_login, tableName=jhi_user; createIndex indexName=idx_user_email, tableName=jhi_user; createTable tableName=jhi_authority; createTable tableName=jhi_user_authority; addPrimaryKey tableN...		\N	3.5.4	\N	\N	7791588998
+20180531010508-1	jhipster	config/liquibase/changelog/20180531010508_added_entity_Country.xml	2018-05-31 13:33:09.668938	3	EXECUTED	7:fa65240ee27eabf430896167d5f51e1b	createTable tableName=country; createIndex indexName=idx_country_name, tableName=country; loadData tableName=country		\N	3.5.4	\N	\N	7791588998
+\.
+
+
+--
+-- TOC entry 2849 (class 0 OID 19309)
+-- Dependencies: 196
+-- Data for Name: databasechangeloglock; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.databasechangeloglock (id, locked, lockgranted, lockedby) FROM stdin;
+1	f	\N	\N
+\.
+
+
+--
+-- TOC entry 2853 (class 0 OID 19337)
+-- Dependencies: 200
+-- Data for Name: jhi_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.jhi_authority (name) FROM stdin;
+ROLE_ADMIN
+ROLE_USER
+\.
+
+
+--
+-- TOC entry 2855 (class 0 OID 19357)
+-- Dependencies: 202
+-- Data for Name: jhi_persistent_audit_event; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.jhi_persistent_audit_event (event_id, principal, event_date, event_type) FROM stdin;
+951	admin	2018-05-31 13:36:40.658	AUTHENTICATION_SUCCESS
+1051	admin	2018-05-31 15:17:57.924	AUTHENTICATION_SUCCESS
+\.
+
+
+--
+-- TOC entry 2856 (class 0 OID 19362)
+-- Dependencies: 203
+-- Data for Name: jhi_persistent_audit_evt_data; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.jhi_persistent_audit_evt_data (event_id, name, value) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2852 (class 0 OID 19322)
+-- Dependencies: 199
+-- Data for Name: jhi_user; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.jhi_user (id, login, password_hash, first_name, last_name, email, image_url, activated, lang_key, activation_key, reset_key, created_by, created_date, reset_date, last_modified_by, last_modified_date) FROM stdin;
+1	system	$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG	System	System	system@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
+2	anonymoususer	$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO	Anonymous	User	anonymous@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
+3	admin	$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC	Administrator	Administrator	admin@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
+4	user	$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K	User	User	user@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
+\.
+
+
+--
+-- TOC entry 2854 (class 0 OID 19342)
+-- Dependencies: 201
+-- Data for Name: jhi_user_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.jhi_user_authority (user_id, authority_name) FROM stdin;
+1	ROLE_ADMIN
+1	ROLE_USER
+3	ROLE_ADMIN
+3	ROLE_USER
+4	ROLE_USER
+\.
+
+
+--
+-- TOC entry 2866 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: contractsappuser
+--
+
+SELECT pg_catalog.setval('public.hibernate_sequence', 1150, true);
+
+
+--
+-- TOC entry 2719 (class 2606 OID 19366)
+-- Name: jhi_persistent_audit_evt_data jhi_persistent_audit_evt_data_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
+    ADD CONSTRAINT jhi_persistent_audit_evt_data_pkey PRIMARY KEY (event_id, name);
+
+
+--
+-- TOC entry 2713 (class 2606 OID 19346)
+-- Name: jhi_user_authority jhi_user_authority_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user_authority
+    ADD CONSTRAINT jhi_user_authority_pkey PRIMARY KEY (user_id, authority_name);
+
+
+--
+-- TOC entry 2722 (class 2606 OID 19378)
+-- Name: country pk_country; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT pk_country PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2701 (class 2606 OID 19313)
+-- Name: databasechangeloglock pk_databasechangeloglock; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.databasechangeloglock
+    ADD CONSTRAINT pk_databasechangeloglock PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2711 (class 2606 OID 19341)
+-- Name: jhi_authority pk_jhi_authority; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_authority
+    ADD CONSTRAINT pk_jhi_authority PRIMARY KEY (name);
+
+
+--
+-- TOC entry 2716 (class 2606 OID 19361)
+-- Name: jhi_persistent_audit_event pk_jhi_persistent_audit_event; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_persistent_audit_event
+    ADD CONSTRAINT pk_jhi_persistent_audit_event PRIMARY KEY (event_id);
+
+
+--
+-- TOC entry 2705 (class 2606 OID 19330)
+-- Name: jhi_user pk_jhi_user; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user
+    ADD CONSTRAINT pk_jhi_user PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2724 (class 2606 OID 19380)
+-- Name: country ux_country_name; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT ux_country_name UNIQUE (name);
+
+
+--
+-- TOC entry 2707 (class 2606 OID 19332)
+-- Name: jhi_user ux_user_email; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user
+    ADD CONSTRAINT ux_user_email UNIQUE (email);
+
+
+--
+-- TOC entry 2709 (class 2606 OID 19334)
+-- Name: jhi_user ux_user_login; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user
+    ADD CONSTRAINT ux_user_login UNIQUE (login);
+
+
+--
+-- TOC entry 2720 (class 1259 OID 19381)
+-- Name: idx_country_name; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE UNIQUE INDEX idx_country_name ON public.country USING btree (name);
+
+
+--
+-- TOC entry 2714 (class 1259 OID 19367)
+-- Name: idx_persistent_audit_event; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE INDEX idx_persistent_audit_event ON public.jhi_persistent_audit_event USING btree (principal, event_date);
+
+
+--
+-- TOC entry 2717 (class 1259 OID 19368)
+-- Name: idx_persistent_audit_evt_data; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE INDEX idx_persistent_audit_evt_data ON public.jhi_persistent_audit_evt_data USING btree (event_id);
+
+
+--
+-- TOC entry 2702 (class 1259 OID 19336)
+-- Name: idx_user_email; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE UNIQUE INDEX idx_user_email ON public.jhi_user USING btree (email);
+
+
+--
+-- TOC entry 2703 (class 1259 OID 19335)
+-- Name: idx_user_login; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE UNIQUE INDEX idx_user_login ON public.jhi_user USING btree (login);
+
+
+--
+-- TOC entry 2725 (class 2606 OID 19347)
+-- Name: jhi_user_authority fk_authority_name; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user_authority
+    ADD CONSTRAINT fk_authority_name FOREIGN KEY (authority_name) REFERENCES public.jhi_authority(name);
+
+
+--
+-- TOC entry 2727 (class 2606 OID 19369)
+-- Name: jhi_persistent_audit_evt_data fk_evt_pers_audit_evt_data; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
+    ADD CONSTRAINT fk_evt_pers_audit_evt_data FOREIGN KEY (event_id) REFERENCES public.jhi_persistent_audit_event(event_id);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 19352)
+-- Name: jhi_user_authority fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.jhi_user_authority
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public.jhi_user(id);
+
+
+-- Completed on 2018-05-31 15:43:50
+
+--
+-- PostgreSQL database dump complete
+--
+
