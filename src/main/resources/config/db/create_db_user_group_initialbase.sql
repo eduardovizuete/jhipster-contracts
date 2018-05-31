@@ -1,4 +1,6 @@
 -- Database: contracts
+-- DROP DATABASE contracts;
+
 CREATE ROLE contracts_group
     NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;
 CREATE ROLE contractsappuser LOGIN

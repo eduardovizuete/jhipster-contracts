@@ -1,0 +1,5 @@
+entity Country {
+  name String required
+}
+
+paginate Country with pagination
