@@ -5,6 +5,7 @@ import { SERVER_API_URL } from '../../app.constants';
 
 import { Country } from './country.model';
 import { createRequestOption } from '../../shared';
+import { MAX_PAGE_SIZE } from '../../shared';
 
 export type EntityResponseType = HttpResponse<Country>;
 
@@ -34,6 +35,13 @@ export class CountryService {
     }
 
     query(req?: any): Observable<HttpResponse<Country[]>> {
+        if (!req) {
+            req = {
+                page: 0,
+                size: MAX_PAGE_SIZE,
+                sort: ['name,asc', 'id']
+            };
+        }
         const options = createRequestOption(req);
         return this.http.get<Country[]>(this.resourceUrl, { params: options, observe: 'response' })
             .map((res: HttpResponse<Country[]>) => this.convertArrayResponse(res));

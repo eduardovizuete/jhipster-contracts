@@ -5,7 +5,7 @@
 -- Dumped from database version 10.4
 -- Dumped by pg_dump version 10.4
 
--- Started on 2018-05-31 15:43:49
+-- Started on 2018-06-01 12:52:54
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +26,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2865 (class 0 OID 0)
+-- TOC entry 2874 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -39,7 +39,21 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 204 (class 1259 OID 19374)
+-- TOC entry 205 (class 1259 OID 19711)
+-- Name: city; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.city (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    country_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.city OWNER TO contractsappuser;
+
+--
+-- TOC entry 204 (class 1259 OID 19697)
 -- Name: country; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -52,7 +66,7 @@ CREATE TABLE public.country (
 ALTER TABLE public.country OWNER TO contractsappuser;
 
 --
--- TOC entry 197 (class 1259 OID 19314)
+-- TOC entry 197 (class 1259 OID 19637)
 -- Name: databasechangelog; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -77,7 +91,7 @@ CREATE TABLE public.databasechangelog (
 ALTER TABLE public.databasechangelog OWNER TO contractsappuser;
 
 --
--- TOC entry 196 (class 1259 OID 19309)
+-- TOC entry 196 (class 1259 OID 19632)
 -- Name: databasechangeloglock; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -92,7 +106,7 @@ CREATE TABLE public.databasechangeloglock (
 ALTER TABLE public.databasechangeloglock OWNER TO contractsappuser;
 
 --
--- TOC entry 198 (class 1259 OID 19320)
+-- TOC entry 198 (class 1259 OID 19643)
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: contractsappuser
 --
 
@@ -107,7 +121,7 @@ CREATE SEQUENCE public.hibernate_sequence
 ALTER TABLE public.hibernate_sequence OWNER TO contractsappuser;
 
 --
--- TOC entry 200 (class 1259 OID 19337)
+-- TOC entry 200 (class 1259 OID 19660)
 -- Name: jhi_authority; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -119,7 +133,7 @@ CREATE TABLE public.jhi_authority (
 ALTER TABLE public.jhi_authority OWNER TO contractsappuser;
 
 --
--- TOC entry 202 (class 1259 OID 19357)
+-- TOC entry 202 (class 1259 OID 19680)
 -- Name: jhi_persistent_audit_event; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -134,7 +148,7 @@ CREATE TABLE public.jhi_persistent_audit_event (
 ALTER TABLE public.jhi_persistent_audit_event OWNER TO contractsappuser;
 
 --
--- TOC entry 203 (class 1259 OID 19362)
+-- TOC entry 203 (class 1259 OID 19685)
 -- Name: jhi_persistent_audit_evt_data; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -148,7 +162,7 @@ CREATE TABLE public.jhi_persistent_audit_evt_data (
 ALTER TABLE public.jhi_persistent_audit_evt_data OWNER TO contractsappuser;
 
 --
--- TOC entry 199 (class 1259 OID 19322)
+-- TOC entry 199 (class 1259 OID 19645)
 -- Name: jhi_user; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -175,7 +189,7 @@ CREATE TABLE public.jhi_user (
 ALTER TABLE public.jhi_user OWNER TO contractsappuser;
 
 --
--- TOC entry 201 (class 1259 OID 19342)
+-- TOC entry 201 (class 1259 OID 19665)
 -- Name: jhi_user_authority; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -188,7 +202,67 @@ CREATE TABLE public.jhi_user_authority (
 ALTER TABLE public.jhi_user_authority OWNER TO contractsappuser;
 
 --
--- TOC entry 2857 (class 0 OID 19374)
+-- TOC entry 2866 (class 0 OID 19711)
+-- Dependencies: 205
+-- Data for Name: city; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.city (id, name, country_id) FROM stdin;
+1	Alausí	52
+2	Ambato	52
+3	Azogues	52
+4	Babahoyo	52
+5	Buena Fe	52
+6	Cayambe	52
+7	Chone	52
+8	Cuenca	52
+9	Daule	52
+10	Durán	52
+11	El Carmen	52
+12	Esmeraldas	52
+13	Gualaceo	52
+14	Guamote	52
+15	Guayaquil	52
+16	Huaquillas	52
+17	Ibarra	52
+18	Jipijapa	52
+19	La Libertad	52
+20	La Maná	52
+21	La Troncal	52
+22	Latacunga	52
+23	Loja	52
+24	Macas	52
+25	Machala	52
+26	Manta 	52
+27	Milagro	52
+28	Nueva Loja	52
+29	Otavalo	52
+30	Pasaje	52
+31	Píllaro	52
+32	Piñas	52
+33	Portovelo	52
+34	Portoviejo	52
+35	Puyango	52
+36	Quevedo 	52
+37	Quijos	52
+38	Quito	52
+39	Riobamba	52
+40	Salinas	52
+41	Samborondón	52
+42	San Gabriel	52
+43	Sangolquí	52
+44	Santa Elena	52
+45	Santa Rosa	52
+46	Santo Domingo de los Colorados	52
+47	Tena	52
+48	Tulcán	52
+49	Velasco Ibarra	52
+50	Ventanas	52
+\.
+
+
+--
+-- TOC entry 2865 (class 0 OID 19697)
 -- Dependencies: 204
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -392,20 +466,22 @@ COPY public.country (id, name) FROM stdin;
 
 
 --
--- TOC entry 2850 (class 0 OID 19314)
+-- TOC entry 2858 (class 0 OID 19637)
 -- Dependencies: 197
 -- Data for Name: databasechangelog; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.databasechangelog (id, author, filename, dateexecuted, orderexecuted, exectype, md5sum, description, comments, tag, liquibase, contexts, labels, deployment_id) FROM stdin;
-00000000000000	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-05-31 13:33:09.050802	1	EXECUTED	7:a6235f40597a13436aa36c6d61db2269	createSequence sequenceName=hibernate_sequence		\N	3.5.4	\N	\N	7791588998
-00000000000001	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-05-31 13:33:09.547588	2	EXECUTED	7:52839c39ca98b24936251e7ab4eb10bb	createTable tableName=jhi_user; createIndex indexName=idx_user_login, tableName=jhi_user; createIndex indexName=idx_user_email, tableName=jhi_user; createTable tableName=jhi_authority; createTable tableName=jhi_user_authority; addPrimaryKey tableN...		\N	3.5.4	\N	\N	7791588998
-20180531010508-1	jhipster	config/liquibase/changelog/20180531010508_added_entity_Country.xml	2018-05-31 13:33:09.668938	3	EXECUTED	7:fa65240ee27eabf430896167d5f51e1b	createTable tableName=country; createIndex indexName=idx_country_name, tableName=country; loadData tableName=country		\N	3.5.4	\N	\N	7791588998
+00000000000000	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-01 12:40:15.158661	1	EXECUTED	7:a6235f40597a13436aa36c6d61db2269	createSequence sequenceName=hibernate_sequence		\N	3.5.4	\N	\N	7874815112
+00000000000001	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-01 12:40:15.684643	2	EXECUTED	7:52839c39ca98b24936251e7ab4eb10bb	createTable tableName=jhi_user; createIndex indexName=idx_user_login, tableName=jhi_user; createIndex indexName=idx_user_email, tableName=jhi_user; createTable tableName=jhi_authority; createTable tableName=jhi_user_authority; addPrimaryKey tableN...		\N	3.5.4	\N	\N	7874815112
+20180531010508-1	jhipster	config/liquibase/changelog/20180531010508_added_entity_Country.xml	2018-06-01 12:40:15.917965	3	EXECUTED	7:fa65240ee27eabf430896167d5f51e1b	createTable tableName=country; createIndex indexName=idx_country_name, tableName=country; loadData tableName=country		\N	3.5.4	\N	\N	7874815112
+20180531222526-1	jhipster	config/liquibase/changelog/20180531222526_added_entity_City.xml	2018-06-01 12:45:13.717036	4	EXECUTED	7:d4b40bf0f2621b7f8882f959c61256b2	createTable tableName=city; createIndex indexName=idx_city_name_country_id, tableName=city; loadData tableName=city		\N	3.5.4	\N	\N	7875113585
+20180531222526-2	jhipster	config/liquibase/changelog/20180531222526_added_entity_constraints_City.xml	2018-06-01 12:45:13.735304	5	EXECUTED	7:fa0122236985eb7b9bfa9a599e2e8598	addForeignKeyConstraint baseTableName=city, constraintName=fk_city_country_id, referencedTableName=country		\N	3.5.4	\N	\N	7875113585
 \.
 
 
 --
--- TOC entry 2849 (class 0 OID 19309)
+-- TOC entry 2857 (class 0 OID 19632)
 -- Dependencies: 196
 -- Data for Name: databasechangeloglock; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -416,7 +492,7 @@ COPY public.databasechangeloglock (id, locked, lockgranted, lockedby) FROM stdin
 
 
 --
--- TOC entry 2853 (class 0 OID 19337)
+-- TOC entry 2861 (class 0 OID 19660)
 -- Dependencies: 200
 -- Data for Name: jhi_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -428,19 +504,18 @@ ROLE_USER
 
 
 --
--- TOC entry 2855 (class 0 OID 19357)
+-- TOC entry 2863 (class 0 OID 19680)
 -- Dependencies: 202
 -- Data for Name: jhi_persistent_audit_event; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.jhi_persistent_audit_event (event_id, principal, event_date, event_type) FROM stdin;
-951	admin	2018-05-31 13:36:40.658	AUTHENTICATION_SUCCESS
-1051	admin	2018-05-31 15:17:57.924	AUTHENTICATION_SUCCESS
+951	admin	2018-06-01 12:47:19.385	AUTHENTICATION_SUCCESS
 \.
 
 
 --
--- TOC entry 2856 (class 0 OID 19362)
+-- TOC entry 2864 (class 0 OID 19685)
 -- Dependencies: 203
 -- Data for Name: jhi_persistent_audit_evt_data; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -450,21 +525,21 @@ COPY public.jhi_persistent_audit_evt_data (event_id, name, value) FROM stdin;
 
 
 --
--- TOC entry 2852 (class 0 OID 19322)
+-- TOC entry 2860 (class 0 OID 19645)
 -- Dependencies: 199
 -- Data for Name: jhi_user; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.jhi_user (id, login, password_hash, first_name, last_name, email, image_url, activated, lang_key, activation_key, reset_key, created_by, created_date, reset_date, last_modified_by, last_modified_date) FROM stdin;
-1	system	$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG	System	System	system@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
-2	anonymoususer	$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO	Anonymous	User	anonymous@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
-3	admin	$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC	Administrator	Administrator	admin@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
-4	user	$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K	User	User	user@localhost		t	en	\N	\N	system	2018-05-31 13:33:09.068497	\N	system	\N
+1	system	$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG	System	System	system@localhost		t	en	\N	\N	system	2018-06-01 12:40:15.168343	\N	system	\N
+2	anonymoususer	$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO	Anonymous	User	anonymous@localhost		t	en	\N	\N	system	2018-06-01 12:40:15.168343	\N	system	\N
+3	admin	$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC	Administrator	Administrator	admin@localhost		t	en	\N	\N	system	2018-06-01 12:40:15.168343	\N	system	\N
+4	user	$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K	User	User	user@localhost		t	en	\N	\N	system	2018-06-01 12:40:15.168343	\N	system	\N
 \.
 
 
 --
--- TOC entry 2854 (class 0 OID 19342)
+-- TOC entry 2862 (class 0 OID 19665)
 -- Dependencies: 201
 -- Data for Name: jhi_user_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -479,16 +554,16 @@ COPY public.jhi_user_authority (user_id, authority_name) FROM stdin;
 
 
 --
--- TOC entry 2866 (class 0 OID 0)
+-- TOC entry 2875 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: contractsappuser
 --
 
-SELECT pg_catalog.setval('public.hibernate_sequence', 1150, true);
+SELECT pg_catalog.setval('public.hibernate_sequence', 1050, true);
 
 
 --
--- TOC entry 2719 (class 2606 OID 19366)
+-- TOC entry 2723 (class 2606 OID 19689)
 -- Name: jhi_persistent_audit_evt_data jhi_persistent_audit_evt_data_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -497,7 +572,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
 
 
 --
--- TOC entry 2713 (class 2606 OID 19346)
+-- TOC entry 2717 (class 2606 OID 19669)
 -- Name: jhi_user_authority jhi_user_authority_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -506,7 +581,16 @@ ALTER TABLE ONLY public.jhi_user_authority
 
 
 --
--- TOC entry 2722 (class 2606 OID 19378)
+-- TOC entry 2731 (class 2606 OID 19715)
+-- Name: city pk_city; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.city
+    ADD CONSTRAINT pk_city PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 19701)
 -- Name: country pk_country; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -515,7 +599,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- TOC entry 2701 (class 2606 OID 19313)
+-- TOC entry 2705 (class 2606 OID 19636)
 -- Name: databasechangeloglock pk_databasechangeloglock; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -524,7 +608,7 @@ ALTER TABLE ONLY public.databasechangeloglock
 
 
 --
--- TOC entry 2711 (class 2606 OID 19341)
+-- TOC entry 2715 (class 2606 OID 19664)
 -- Name: jhi_authority pk_jhi_authority; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -533,7 +617,7 @@ ALTER TABLE ONLY public.jhi_authority
 
 
 --
--- TOC entry 2716 (class 2606 OID 19361)
+-- TOC entry 2720 (class 2606 OID 19684)
 -- Name: jhi_persistent_audit_event pk_jhi_persistent_audit_event; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -542,7 +626,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_event
 
 
 --
--- TOC entry 2705 (class 2606 OID 19330)
+-- TOC entry 2709 (class 2606 OID 19653)
 -- Name: jhi_user pk_jhi_user; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -551,7 +635,7 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2724 (class 2606 OID 19380)
+-- TOC entry 2728 (class 2606 OID 19703)
 -- Name: country ux_country_name; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -560,7 +644,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- TOC entry 2707 (class 2606 OID 19332)
+-- TOC entry 2711 (class 2606 OID 19655)
 -- Name: jhi_user ux_user_email; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -569,7 +653,7 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2709 (class 2606 OID 19334)
+-- TOC entry 2713 (class 2606 OID 19657)
 -- Name: jhi_user ux_user_login; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -578,7 +662,15 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2720 (class 1259 OID 19381)
+-- TOC entry 2729 (class 1259 OID 19716)
+-- Name: idx_city_name_country_id; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE UNIQUE INDEX idx_city_name_country_id ON public.city USING btree (name, country_id);
+
+
+--
+-- TOC entry 2724 (class 1259 OID 19704)
 -- Name: idx_country_name; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -586,7 +678,7 @@ CREATE UNIQUE INDEX idx_country_name ON public.country USING btree (name);
 
 
 --
--- TOC entry 2714 (class 1259 OID 19367)
+-- TOC entry 2718 (class 1259 OID 19690)
 -- Name: idx_persistent_audit_event; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -594,7 +686,7 @@ CREATE INDEX idx_persistent_audit_event ON public.jhi_persistent_audit_event USI
 
 
 --
--- TOC entry 2717 (class 1259 OID 19368)
+-- TOC entry 2721 (class 1259 OID 19691)
 -- Name: idx_persistent_audit_evt_data; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -602,7 +694,7 @@ CREATE INDEX idx_persistent_audit_evt_data ON public.jhi_persistent_audit_evt_da
 
 
 --
--- TOC entry 2702 (class 1259 OID 19336)
+-- TOC entry 2706 (class 1259 OID 19659)
 -- Name: idx_user_email; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -610,7 +702,7 @@ CREATE UNIQUE INDEX idx_user_email ON public.jhi_user USING btree (email);
 
 
 --
--- TOC entry 2703 (class 1259 OID 19335)
+-- TOC entry 2707 (class 1259 OID 19658)
 -- Name: idx_user_login; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -618,7 +710,7 @@ CREATE UNIQUE INDEX idx_user_login ON public.jhi_user USING btree (login);
 
 
 --
--- TOC entry 2725 (class 2606 OID 19347)
+-- TOC entry 2732 (class 2606 OID 19670)
 -- Name: jhi_user_authority fk_authority_name; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -627,7 +719,16 @@ ALTER TABLE ONLY public.jhi_user_authority
 
 
 --
--- TOC entry 2727 (class 2606 OID 19369)
+-- TOC entry 2735 (class 2606 OID 19717)
+-- Name: city fk_city_country_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.city
+    ADD CONSTRAINT fk_city_country_id FOREIGN KEY (country_id) REFERENCES public.country(id);
+
+
+--
+-- TOC entry 2734 (class 2606 OID 19692)
 -- Name: jhi_persistent_audit_evt_data fk_evt_pers_audit_evt_data; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -636,7 +737,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
 
 
 --
--- TOC entry 2726 (class 2606 OID 19352)
+-- TOC entry 2733 (class 2606 OID 19675)
 -- Name: jhi_user_authority fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -644,7 +745,7 @@ ALTER TABLE ONLY public.jhi_user_authority
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public.jhi_user(id);
 
 
--- Completed on 2018-05-31 15:43:50
+-- Completed on 2018-06-01 12:52:55
 
 --
 -- PostgreSQL database dump complete

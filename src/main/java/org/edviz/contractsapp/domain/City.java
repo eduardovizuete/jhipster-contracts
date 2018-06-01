@@ -1,6 +1,5 @@
 package org.edviz.contractsapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -9,18 +8,16 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
- * A Country.
+ * A City.
  */
 @Entity
-@Table(name = "country")
+@Table(name = "city")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "country")
-public class Country implements Serializable {
+@Document(indexName = "city")
+public class City implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,13 +27,12 @@ public class Country implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "country")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<City> cities = new HashSet<>();
+    @ManyToOne(optional = false)
+    @NotNull
+    private Country country;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -51,7 +47,7 @@ public class Country implements Serializable {
         return name;
     }
 
-    public Country name(String name) {
+    public City name(String name) {
         this.name = name;
         return this;
     }
@@ -60,29 +56,17 @@ public class Country implements Serializable {
         this.name = name;
     }
 
-    public Set<City> getCities() {
-        return cities;
+    public Country getCountry() {
+        return country;
     }
 
-    public Country cities(Set<City> cities) {
-        this.cities = cities;
+    public City country(Country country) {
+        this.country = country;
         return this;
     }
 
-    public Country addCities(City city) {
-        this.cities.add(city);
-        city.setCountry(this);
-        return this;
-    }
-
-    public Country removeCities(City city) {
-        this.cities.remove(city);
-        city.setCountry(null);
-        return this;
-    }
-
-    public void setCities(Set<City> cities) {
-        this.cities = cities;
+    public void setCountry(Country country) {
+        this.country = country;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -94,11 +78,11 @@ public class Country implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Country country = (Country) o;
-        if (country.getId() == null || getId() == null) {
+        City city = (City) o;
+        if (city.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), country.getId());
+        return Objects.equals(getId(), city.getId());
     }
 
     @Override
@@ -108,7 +92,7 @@ public class Country implements Serializable {
 
     @Override
     public String toString() {
-        return "Country{" +
+        return "City{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             "}";

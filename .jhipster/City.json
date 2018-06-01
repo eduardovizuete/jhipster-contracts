@@ -2,10 +2,11 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "relationshipName": "cities",
-            "otherEntityName": "city",
-            "otherEntityRelationshipName": "country"
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "country",
+            "otherEntityName": "country",
+            "otherEntityField": "name"
         }
     ],
     "fields": [
@@ -17,8 +18,8 @@
             ]
         }
     ],
-    "changelogDate": "20180531010508",
-    "entityTableName": "country",
+    "changelogDate": "20180531222526",
+    "entityTableName": "city",
     "dto": "no",
     "pagination": "pagination",
     "service": "no",

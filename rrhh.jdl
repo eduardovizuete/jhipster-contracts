@@ -2,4 +2,13 @@ entity Country {
   name String required
 }
 
+entity City {
+  name String required
+}
+
+relationship ManyToOne {
+  City{country(name) required} to Country{cities}
+}
+
 paginate Country with pagination
+paginate City with pagination

@@ -533,8 +533,8 @@
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost:5432/contracts</url>
                     <defaultSchemaName></defaultSchemaName>
-                    <username>contracts</username>
-                    <password></password>
+                    <username>contractsappuser</username>
+                    <password>contractsappuser</password>
                     <referenceUrl>hibernate:spring:org.edviz.contractsapp.domain?dialect=org.hibernate.dialect.PostgreSQL82Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>
