@@ -21,6 +21,7 @@ export class CityDialogComponent implements OnInit {
     isSaving: boolean;
 
     countries: Country[];
+    countryOptions: any[];
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -73,6 +74,11 @@ export class CityDialogComponent implements OnInit {
 
     trackCountryById(index: number, item: Country) {
         return item.id;
+    }
+
+    search(event) {
+        this.countryOptions = this.countries.filter((beer) =>
+            beer.name.toLowerCase().startsWith(event.query.toLowerCase()));
     }
 }
 

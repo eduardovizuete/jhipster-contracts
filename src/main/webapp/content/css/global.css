@@ -208,4 +208,14 @@ ui bootstrap tweaks
     white-space: nowrap;
  }
 
+/* ==========================================================================
+ui bootstrap ng prime tweaks
+========================================================================== */
+.ui-autocomplete {
+    width: 100%;
+}
+.ui-autocomplete-input {
+    width: 100%;
+}
+
 /* jhipster-needle-css-add-main JHipster will add new css style */

@@ -2,6 +2,8 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { ContractsSharedModule } from '../../shared';
+
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import {
     CityService,
     CityPopupService,
@@ -24,7 +26,8 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(ENTITY_STATES),
+        AutoCompleteModule
     ],
     declarations: [
         CityComponent,

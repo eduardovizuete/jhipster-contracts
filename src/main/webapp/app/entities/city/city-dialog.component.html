@@ -24,16 +24,24 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <!--div class="form-group">
             <label class="form-control-label" jhiTranslate="contractsApp.city.country" for="field_country">Country</label>
             <select class="form-control" id="field_country" name="country" [(ngModel)]="city.country"  required>
                 <option *ngIf="!editForm.value.country" [ngValue]="null" selected></option>
                 <option [ngValue]="countryOption.id === city.country?.id ? city.country : countryOption" *ngFor="let countryOption of countries; trackBy: trackCountryById">{{countryOption.name}}</option>
             </select>
+        </div-->
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="contractsApp.city.country" for="field_country">Country</label>
+            <p-autoComplete  id="field_country" name="country" [(ngModel)]="city.country" required
+                         [suggestions]="countryOptions"
+                         (completeMethod)="search($event)" field="name">
+            </p-autoComplete>
         </div>
         <div [hidden]="!(editForm.controls.country?.dirty && editForm.controls.country?.invalid)">
             <small class="form-text text-danger"
-                [hidden]="!editForm.controls.country?.errors?.required" jhiTranslate="entity.validation.required">
+                   [hidden]="!editForm.controls.country?.errors?.required" jhiTranslate="entity.validation.required">
                 This field is required.
             </small>
         </div>
