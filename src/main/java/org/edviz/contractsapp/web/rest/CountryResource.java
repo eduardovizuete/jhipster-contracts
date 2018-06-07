@@ -109,6 +109,21 @@ public class CountryResource {
     }
 
     /**
+     * GET  /countries : get all the countries.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of countries in body
+     */
+    @GetMapping("/countries/searchByName/{name}")
+    @Timed
+    public ResponseEntity<List<Country>> getAllCountriesByName(@PathVariable String name, Pageable pageable) {
+        log.debug("REST request to get a page of Countries by Name : {}", name);
+        Page<Country> page = countryRepository.findByNameContainsIgnoreCase(name, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/countries");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * GET  /countries/:id : get the "id" country.
      *
      * @param id the id of the country to retrieve

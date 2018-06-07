@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { ContractsSharedModule } from '../../shared';
 
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import {
     CityService,
     CityPopupService,
@@ -27,7 +29,8 @@ const ENTITY_STATES = [
     imports: [
         ContractsSharedModule,
         RouterModule.forChild(ENTITY_STATES),
-        AutoCompleteModule
+        AutoCompleteModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         CityComponent,

@@ -15,6 +15,8 @@ export class CountryService {
     private resourceUrl =  SERVER_API_URL + 'api/countries';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/countries';
 
+    private resourceSearchByNameUrl =  SERVER_API_URL + this.resourceUrl + '/searchByName';
+
     constructor(private http: HttpClient) { }
 
     create(country: Country): Observable<EntityResponseType> {
@@ -54,6 +56,23 @@ export class CountryService {
     search(req?: any): Observable<HttpResponse<Country[]>> {
         const options = createRequestOption(req);
         return this.http.get<Country[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Country[]>) => this.convertArrayResponse(res));
+    }
+
+    public findCountryByName(name: string): Observable<Country[]> {
+        if (!name) {
+            return Observable.of([]);
+        }
+
+        return this.http.get(`${this.resourceSearchByNameUrl}/${name}`).catch(error => {
+            console.error( JSON.stringify( error ) );
+            return Observable.throw( error );
+        });
+    }
+
+    queryCountryByName(name: string, req?: any): Observable<HttpResponse<Country[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Country[]>(`${this.resourceSearchByNameUrl}/${name}`, { params: options, observe: 'response' })
             .map((res: HttpResponse<Country[]>) => this.convertArrayResponse(res));
     }
 

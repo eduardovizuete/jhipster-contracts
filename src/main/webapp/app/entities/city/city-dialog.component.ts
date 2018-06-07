@@ -10,6 +10,8 @@ import { City } from './city.model';
 import { CityPopupService } from './city-popup.service';
 import { CityService } from './city.service';
 import { Country, CountryService } from '../country';
+import { FormControl } from '@angular/forms';
+import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-city-dialog',
@@ -21,7 +23,12 @@ export class CityDialogComponent implements OnInit {
     isSaving: boolean;
 
     countries: Country[];
-    countryOptions: any[];
+    //countryOptions: any[];
+    countryOptions: Country[];
+
+    countriesOb: Observable<Country[]>;
+    countryName = new FormControl();
+    countriesLoading = false;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -34,8 +41,15 @@ export class CityDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.countryService.query()
-            .subscribe((res: HttpResponse<Country[]>) => { this.countries = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        // this.countryService.query()
+        //    .subscribe((res: HttpResponse<Country[]>) => { this.countries = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+
+        this.countriesOb = this.countryName.valueChanges.pipe(
+            debounceTime(400),
+            distinctUntilChanged(),
+            tap(() => this.countriesLoading = true),
+            switchMap(name => this.countryService.findCountryByName(name)),
+            tap(() => this.countriesLoading = false));
     }
 
     clear() {
@@ -77,8 +91,25 @@ export class CityDialogComponent implements OnInit {
     }
 
     search(event) {
-        this.countryOptions = this.countries.filter((beer) =>
-            beer.name.toLowerCase().startsWith(event.query.toLowerCase()));
+        // this.countryOptions = this.countries.filter((beer) =>
+        //     beer.name.toLowerCase().startsWith(event.query.toLowerCase()));
+        //
+        // this.mylookupservice.getResults(event.query).then(data => {
+        //     this.results = data;
+        // });
+        // this.countryService.query()
+        //    .subscribe((res: HttpResponse<Country[]>) => { this.countries = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+
+        // this.countryService.findCountryByName(event.query.toLowerCase())
+        //     .subscribe((res) => { this.countryOptions = res; }, (res: HttpErrorResponse) => this.onError(res.message));
+
+        this.countryService.queryCountryByName(event.query.toLowerCase())
+            .subscribe((res: HttpResponse<Country[]>) => { this.countryOptions = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+    }
+
+    select(item: Country){
+        this.city.country = item;
+        this.countryName.setValue('');
     }
 }
 
