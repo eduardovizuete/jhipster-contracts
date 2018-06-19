@@ -13,6 +13,7 @@ export class CityService {
 
     private resourceUrl =  SERVER_API_URL + 'api/cities';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/cities';
+    private resourceSearchByNameUrl =  SERVER_API_URL + this.resourceUrl + '/searchByName';
 
     constructor(private http: HttpClient) { }
 
@@ -46,6 +47,12 @@ export class CityService {
     search(req?: any): Observable<HttpResponse<City[]>> {
         const options = createRequestOption(req);
         return this.http.get<City[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<City[]>) => this.convertArrayResponse(res));
+    }
+
+    queryCityByName(name: string, req?: any): Observable<HttpResponse<City[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<City[]>(`${this.resourceSearchByNameUrl}/${name}`, { params: options, observe: 'response' })
             .map((res: HttpResponse<City[]>) => this.convertArrayResponse(res));
     }
 

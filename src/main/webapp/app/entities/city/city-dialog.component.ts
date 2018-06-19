@@ -23,7 +23,7 @@ export class CityDialogComponent implements OnInit {
     isSaving: boolean;
 
     countries: Country[];
-    //countryOptions: any[];
+    // countryOptions: any[];
     countryOptions: Country[];
 
     countriesOb: Observable<Country[]>;
@@ -48,7 +48,7 @@ export class CityDialogComponent implements OnInit {
             debounceTime(400),
             distinctUntilChanged(),
             tap(() => this.countriesLoading = true),
-            switchMap(name => this.countryService.findCountryByName(name)),
+            switchMap((name) => this.countryService.findCountryByName(name)),
             tap(() => this.countriesLoading = false));
     }
 
@@ -107,7 +107,7 @@ export class CityDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<Country[]>) => { this.countryOptions = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
-    select(item: Country){
+    select(item: Country) {
         this.city.country = item;
         this.countryName.setValue('');
     }

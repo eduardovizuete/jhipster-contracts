@@ -64,7 +64,7 @@ export class CountryService {
             return Observable.of([]);
         }
 
-        return this.http.get(`${this.resourceSearchByNameUrl}/${name}`).catch(error => {
+        return this.http.get(`${this.resourceSearchByNameUrl}/${name}`).catch((error) => {
             console.error( JSON.stringify( error ) );
             return Observable.throw( error );
         });

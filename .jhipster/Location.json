@@ -4,28 +4,33 @@
         {
             "relationshipType": "many-to-one",
             "relationshipValidateRules": "required",
-            "relationshipName": "country",
-            "otherEntityName": "country",
+            "relationshipName": "city",
+            "otherEntityName": "city",
             "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "locations",
-            "otherEntityName": "location",
-            "otherEntityRelationshipName": "city"
         }
     ],
     "fields": [
         {
-            "fieldName": "name",
+            "fieldName": "streetAddress",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "stateProvince",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "postalCode",
+            "fieldType": "String"
         }
     ],
-    "changelogDate": "20180531222526",
-    "entityTableName": "city",
+    "changelogDate": "20180614203550",
+    "entityTableName": "location",
     "dto": "no",
     "pagination": "pagination",
     "service": "no",

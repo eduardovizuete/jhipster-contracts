@@ -18,7 +18,8 @@
                 "title": "City"
             },
             "name": "Name",
-            "country": "Country"
+            "country": "Country",
+            "locations": "Locations"
         }
     }
 }

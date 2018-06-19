@@ -5,6 +5,7 @@ export class City implements BaseEntity {
         public id?: number,
         public name?: string,
         public country?: BaseEntity,
+        public locations?: BaseEntity[],
     ) {
     }
 }

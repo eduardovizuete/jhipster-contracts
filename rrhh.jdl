@@ -10,5 +10,16 @@ relationship ManyToOne {
   City{country(name) required} to Country{cities}
 }
 
+entity Location {
+  streetAddress String required,
+  stateProvince String required,
+  postalCode String,
+}
+
+relationship ManyToOne {
+  Location{city(name) required} to City{locations}
+}
+
 paginate Country with pagination
 paginate City with pagination
+paginate Location with pagination
