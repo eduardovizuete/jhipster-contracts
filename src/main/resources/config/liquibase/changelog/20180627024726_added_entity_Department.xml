@@ -22,7 +22,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_department_name"/>
             </column>
 
             <column name="location_id" type="bigint">
@@ -31,7 +31,26 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
+        <createIndex indexName="idx_department_name"
+                     tableName="department"
+                     unique="true">
+            <column name="name" type="varchar(255)"/>
+        </createIndex>
+
+        <createIndex indexName="idx_department_name_location_id"
+                     tableName="department"
+                     unique="true">
+            <column name="name" type="varchar(255)"/>
+            <column name="location_id" type="bigint"/>
+        </createIndex>
+
+        <loadData encoding="UTF-8"
+                  file="config/db/departments.csv"
+                  separator=";"
+                  tableName="department">
+        </loadData>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
