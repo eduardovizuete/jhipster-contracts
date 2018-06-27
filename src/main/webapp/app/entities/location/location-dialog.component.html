@@ -1,4 +1,3 @@
-<script src="../country/country.module.ts"></script>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
@@ -43,20 +42,16 @@
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="contractsApp.location.city" for="field_city">City</label>
-            <!--select class="form-control" id="field_city" name="city" [(ngModel)]="location.city"  required>
+            <select class="form-control" id="field_city" name="city" [(ngModel)]="location.city"  required>
                 <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
                 <option [ngValue]="cityOption.id === location.city?.id ? location.city : cityOption" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.name}}</option>
-            </select-->
-            <p-autoComplete  id="field_city" name="city" [(ngModel)]="location.city" required
-                             [suggestions]="cities"
-                             (completeMethod)="searchCity($event)" field="name" [disabled]="false">
-            </p-autoComplete>
-            <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
-                <small class="form-text text-danger"
-                    [hidden]="!editForm.controls.city?.errors?.required" jhiTranslate="entity.validation.required">
-                    This field is required.
-                </small>
-            </div>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.city?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
         </div>
     </div>
     <div class="modal-footer">

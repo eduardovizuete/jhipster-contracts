@@ -1,5 +1,6 @@
 package org.edviz.contractsapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,6 +9,8 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -40,6 +43,11 @@ public class Location implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     private City city;
+
+    @OneToMany(mappedBy = "location")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Department> departments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -100,6 +108,31 @@ public class Location implements Serializable {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public Set<Department> getDepartments() {
+        return departments;
+    }
+
+    public Location departments(Set<Department> departments) {
+        this.departments = departments;
+        return this;
+    }
+
+    public Location addDepartments(Department department) {
+        this.departments.add(department);
+        department.setLocation(this);
+        return this;
+    }
+
+    public Location removeDepartments(Department department) {
+        this.departments.remove(department);
+        department.setLocation(null);
+        return this;
+    }
+
+    public void setDepartments(Set<Department> departments) {
+        this.departments = departments;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

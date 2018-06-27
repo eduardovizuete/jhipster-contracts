@@ -7,6 +7,12 @@
             "relationshipName": "city",
             "otherEntityName": "city",
             "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "departments",
+            "otherEntityName": "department",
+            "otherEntityRelationshipName": "location"
         }
     ],
     "fields": [

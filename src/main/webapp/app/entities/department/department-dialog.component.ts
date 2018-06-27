@@ -6,35 +6,35 @@ import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { Location } from './location.model';
-import { LocationPopupService } from './location-popup.service';
-import { LocationService } from './location.service';
-import { City, CityService } from '../city';
+import { Department } from './department.model';
+import { DepartmentPopupService } from './department-popup.service';
+import { DepartmentService } from './department.service';
+import { Location, LocationService } from '../location';
 
 @Component({
-    selector: 'jhi-location-dialog',
-    templateUrl: './location-dialog.component.html'
+    selector: 'jhi-department-dialog',
+    templateUrl: './department-dialog.component.html'
 })
-export class LocationDialogComponent implements OnInit {
+export class DepartmentDialogComponent implements OnInit {
 
-    location: Location;
+    department: Department;
     isSaving: boolean;
 
-    cities: City[];
+    locations: Location[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
+        private departmentService: DepartmentService,
         private locationService: LocationService,
-        private cityService: CityService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.cityService.query()
-            .subscribe((res: HttpResponse<City[]>) => { this.cities = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.locationService.query()
+            .subscribe((res: HttpResponse<Location[]>) => { this.locations = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -43,22 +43,22 @@ export class LocationDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        if (this.location.id !== undefined) {
+        if (this.department.id !== undefined) {
             this.subscribeToSaveResponse(
-                this.locationService.update(this.location));
+                this.departmentService.update(this.department));
         } else {
             this.subscribeToSaveResponse(
-                this.locationService.create(this.location));
+                this.departmentService.create(this.department));
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<Location>>) {
-        result.subscribe((res: HttpResponse<Location>) =>
+    private subscribeToSaveResponse(result: Observable<HttpResponse<Department>>) {
+        result.subscribe((res: HttpResponse<Department>) =>
             this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: Location) {
-        this.eventManager.broadcast({ name: 'locationListModification', content: 'OK'});
+    private onSaveSuccess(result: Department) {
+        this.eventManager.broadcast({ name: 'departmentListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
@@ -71,32 +71,32 @@ export class LocationDialogComponent implements OnInit {
         this.jhiAlertService.error(error.message, null, null);
     }
 
-    trackCityById(index: number, item: City) {
+    trackLocationById(index: number, item: Location) {
         return item.id;
     }
 }
 
 @Component({
-    selector: 'jhi-location-popup',
+    selector: 'jhi-department-popup',
     template: ''
 })
-export class LocationPopupComponent implements OnInit, OnDestroy {
+export class DepartmentPopupComponent implements OnInit, OnDestroy {
 
     routeSub: any;
 
     constructor(
         private route: ActivatedRoute,
-        private locationPopupService: LocationPopupService
+        private departmentPopupService: DepartmentPopupService
     ) {}
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
-                this.locationPopupService
-                    .open(LocationDialogComponent as Component, params['id']);
+                this.departmentPopupService
+                    .open(DepartmentDialogComponent as Component, params['id']);
             } else {
-                this.locationPopupService
-                    .open(LocationDialogComponent as Component);
+                this.departmentPopupService
+                    .open(DepartmentDialogComponent as Component);
             }
         });
     }

@@ -20,7 +20,8 @@
             "streetAddress": "Street Address",
             "stateProvince": "State Province",
             "postalCode": "Postal Code",
-            "city": "City"
+            "city": "City",
+            "departments": "Departments"
         }
     }
 }

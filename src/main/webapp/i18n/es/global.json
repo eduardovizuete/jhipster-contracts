@@ -10,6 +10,7 @@
                 "country": "Country",
                 "city": "City",
                 "location": "Location",
+                "department": "Department",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

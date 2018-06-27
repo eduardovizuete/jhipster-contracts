@@ -20,6 +20,16 @@ relationship ManyToOne {
   Location{city(name) required} to City{locations}
 }
 
+entity Department {
+	name String required
+}
+
+relationship ManyToOne {
+  Department{location(streetAddress) required} to Location{departments}
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination
+paginate Department with pagination
+
