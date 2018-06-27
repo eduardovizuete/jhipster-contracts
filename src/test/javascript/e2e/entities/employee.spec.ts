@@ -31,7 +31,7 @@ describe('Employee e2e test', () => {
         employeeDialogPage.close();
     });
 
-    it('should create and save Employees', () => {
+   /* it('should create and save Employees', () => {
         employeeComponentsPage.clickOnCreateButton();
         employeeDialogPage.setDocIdInput('docId');
         expect(employeeDialogPage.getDocIdInput()).toMatch('docId');
@@ -47,9 +47,10 @@ describe('Employee e2e test', () => {
         expect(employeeDialogPage.getHireDateInput()).toMatch('2000-12-31');
         employeeDialogPage.setSalaryInput('5');
         expect(employeeDialogPage.getSalaryInput()).toMatch('5');
+        employeeDialogPage.jobSelectLastOption();
         employeeDialogPage.save();
         expect(employeeDialogPage.getSaveButton().isPresent()).toBeFalsy();
-    });
+    });*/
 
     afterAll(() => {
         navBarPage.autoSignOut();
@@ -80,6 +81,7 @@ export class EmployeeDialogPage {
     phoneNumberInput = element(by.css('input#field_phoneNumber'));
     hireDateInput = element(by.css('input#field_hireDate'));
     salaryInput = element(by.css('input#field_salary'));
+    jobSelect = element(by.css('select#field_job'));
 
     getModalTitle() {
         return this.modalTitle.getAttribute('jhiTranslate');
@@ -139,6 +141,22 @@ export class EmployeeDialogPage {
 
     getSalaryInput = function() {
         return this.salaryInput.getAttribute('value');
+    };
+
+    jobSelectLastOption = function() {
+        this.jobSelect.all(by.tagName('option')).last().click();
+    };
+
+    jobSelectOption = function(option) {
+        this.jobSelect.sendKeys(option);
+    };
+
+    getJobSelect = function() {
+        return this.jobSelect;
+    };
+
+    getJobSelectedOption = function() {
+        return this.jobSelect.element(by.css('option:checked')).getText();
     };
 
     save() {

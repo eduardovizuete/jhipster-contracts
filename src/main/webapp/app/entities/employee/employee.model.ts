@@ -10,6 +10,7 @@ export class Employee implements BaseEntity {
         public phoneNumber?: string,
         public hireDate?: any,
         public salary?: number,
+        public job?: BaseEntity,
     ) {
     }
 }

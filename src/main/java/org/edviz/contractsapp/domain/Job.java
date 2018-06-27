@@ -1,5 +1,6 @@
 package org.edviz.contractsapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,6 +9,8 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -39,6 +42,11 @@ public class Job implements Serializable {
     @Min(value = 0L)
     @Column(name = "max_salary", nullable = false)
     private Long maxSalary;
+
+    @OneToMany(mappedBy = "job")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Employee> employees = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -86,6 +94,31 @@ public class Job implements Serializable {
 
     public void setMaxSalary(Long maxSalary) {
         this.maxSalary = maxSalary;
+    }
+
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public Job employees(Set<Employee> employees) {
+        this.employees = employees;
+        return this;
+    }
+
+    public Job addEmployees(Employee employee) {
+        this.employees.add(employee);
+        employee.setJob(this);
+        return this;
+    }
+
+    public Job removeEmployees(Employee employee) {
+        this.employees.remove(employee);
+        employee.setJob(null);
+        return this;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

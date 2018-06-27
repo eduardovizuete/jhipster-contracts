@@ -55,6 +55,10 @@ public class Employee implements Serializable {
     @Column(name = "salary", nullable = false)
     private Long salary;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    private Job job;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -153,6 +157,19 @@ public class Employee implements Serializable {
 
     public void setSalary(Long salary) {
         this.salary = salary;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public Employee job(Job job) {
+        this.job = job;
+        return this;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

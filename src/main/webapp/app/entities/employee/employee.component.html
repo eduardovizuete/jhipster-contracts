@@ -37,6 +37,7 @@
             <th jhiSortBy="phoneNumber"><span jhiTranslate="contractsApp.employee.phoneNumber">Phone Number</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="hireDate"><span jhiTranslate="contractsApp.employee.hireDate">Hire Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="salary"><span jhiTranslate="contractsApp.employee.salary">Salary</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="job.title"><span jhiTranslate="contractsApp.employee.job">Job</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -50,6 +51,11 @@
                 <td>{{employee.phoneNumber}}</td>
                 <td>{{employee.hireDate | date:'mediumDate'}}</td>
                 <td>{{employee.salary}}</td>
+                <td>
+                    <div *ngIf="employee.job">
+                        <a [routerLink]="['../job', employee.job?.id ]" >{{employee.job?.title}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

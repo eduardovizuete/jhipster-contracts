@@ -19,7 +19,8 @@
             },
             "title": "Title",
             "minSalary": "Min Salary",
-            "maxSalary": "Max Salary"
+            "maxSalary": "Max Salary",
+            "employees": "Employees"
         }
     }
 }

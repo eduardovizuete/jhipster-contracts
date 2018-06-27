@@ -44,6 +44,10 @@ entity Employee {
   salary Long required min(0)
 }
 
+relationship ManyToOne {
+  Employee{job(title) required} to Job{employees}
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination

@@ -32,6 +32,12 @@
         <dd>
             <span>{{employee.salary}}</span>
         </dd>
+        <dt><span jhiTranslate="contractsApp.employee.job">Job</span></dt>
+        <dd>
+            <div *ngIf="employee.job">
+                <a [routerLink]="['/job', employee.job?.id]">{{employee.job?.title}}</a>
+            </div>
+        </dd>
     </dl>
 
     <button type="submit"

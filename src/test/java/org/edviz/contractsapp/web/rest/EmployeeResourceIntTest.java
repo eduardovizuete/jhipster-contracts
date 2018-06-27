@@ -3,6 +3,7 @@ package org.edviz.contractsapp.web.rest;
 import org.edviz.contractsapp.ContractsApp;
 
 import org.edviz.contractsapp.domain.Employee;
+import org.edviz.contractsapp.domain.Job;
 import org.edviz.contractsapp.repository.EmployeeRepository;
 import org.edviz.contractsapp.repository.search.EmployeeSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.ExceptionTranslator;
@@ -110,6 +111,11 @@ public class EmployeeResourceIntTest {
             .phoneNumber(DEFAULT_PHONE_NUMBER)
             .hireDate(DEFAULT_HIRE_DATE)
             .salary(DEFAULT_SALARY);
+        // Add required entity
+        Job job = JobResourceIntTest.createEntity(em);
+        em.persist(job);
+        em.flush();
+        employee.setJob(job);
         return employee;
     }
 

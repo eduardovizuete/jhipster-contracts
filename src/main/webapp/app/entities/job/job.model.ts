@@ -6,6 +6,7 @@ export class Job implements BaseEntity {
         public title?: string,
         public minSalary?: number,
         public maxSalary?: number,
+        public employees?: BaseEntity[],
     ) {
     }
 }

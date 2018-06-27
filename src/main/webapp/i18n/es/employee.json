@@ -23,7 +23,8 @@
             "email": "Email",
             "phoneNumber": "Phone Number",
             "hireDate": "Hire Date",
-            "salary": "Salary"
+            "salary": "Salary",
+            "job": "Job"
         }
     }
 }

@@ -1,6 +1,13 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "employees",
+            "otherEntityName": "employee",
+            "otherEntityRelationshipName": "job"
+        }
+    ],
     "fields": [
         {
             "fieldName": "title",

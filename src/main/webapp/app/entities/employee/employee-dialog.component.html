@@ -97,6 +97,19 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="contractsApp.employee.job" for="field_job">Job</label>
+            <select class="form-control" id="field_job" name="job" [(ngModel)]="employee.job"  required>
+                <option *ngIf="!editForm.value.job" [ngValue]="null" selected></option>
+                <option [ngValue]="jobOption.id === employee.job?.id ? employee.job : jobOption" *ngFor="let jobOption of jobs; trackBy: trackJobById">{{jobOption.title}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.job?.dirty && editForm.controls.job?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.job?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

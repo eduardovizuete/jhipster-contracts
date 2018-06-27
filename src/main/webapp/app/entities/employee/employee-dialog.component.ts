@@ -4,11 +4,12 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { Employee } from './employee.model';
 import { EmployeePopupService } from './employee-popup.service';
 import { EmployeeService } from './employee.service';
+import { Job, JobService } from '../job';
 
 @Component({
     selector: 'jhi-employee-dialog',
@@ -18,17 +19,23 @@ export class EmployeeDialogComponent implements OnInit {
 
     employee: Employee;
     isSaving: boolean;
+
+    jobs: Job[];
     hireDateDp: any;
 
     constructor(
         public activeModal: NgbActiveModal,
+        private jhiAlertService: JhiAlertService,
         private employeeService: EmployeeService,
+        private jobService: JobService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.jobService.query()
+            .subscribe((res: HttpResponse<Job[]>) => { this.jobs = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -59,6 +66,14 @@ export class EmployeeDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackJobById(index: number, item: Job) {
+        return item.id;
     }
 }
 

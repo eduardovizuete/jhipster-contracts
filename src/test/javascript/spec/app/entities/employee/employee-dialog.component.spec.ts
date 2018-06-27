@@ -9,6 +9,7 @@ import { ContractsTestModule } from '../../../test.module';
 import { EmployeeDialogComponent } from '../../../../../../main/webapp/app/entities/employee/employee-dialog.component';
 import { EmployeeService } from '../../../../../../main/webapp/app/entities/employee/employee.service';
 import { Employee } from '../../../../../../main/webapp/app/entities/employee/employee.model';
+import { JobService } from '../../../../../../main/webapp/app/entities/job';
 
 describe('Component Tests', () => {
 
@@ -24,6 +25,7 @@ describe('Component Tests', () => {
                 imports: [ContractsTestModule],
                 declarations: [EmployeeDialogComponent],
                 providers: [
+                    JobService,
                     EmployeeService
                 ]
             })
