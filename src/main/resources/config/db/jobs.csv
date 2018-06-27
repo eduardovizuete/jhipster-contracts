@@ -3,12 +3,15 @@ id;title;min_salary;max_salary
 2;Gerente Comercial;0;0
 3;Gerente Administrativo Financiero;0;0
 4;Gerente de Sistemas;0;0
-5;Recepcionista;0;0
-6;Mensajero;0;0
-7;Abogado;0;0
-8;Contador;0;0
+5;Director Regional;0;0
+6;Director Comercial;0;0
+7;Contador;0;0
+8;Abogado;0;0
 9;Asistente Contable;0;0
 10;Asistente de Cartera;0;0
-11;Digitador;0;0
-12;Asesor Comercial;0;0
-13;Director Regional;0;0
+11;Asesor Comercial;0;0
+12;Asesor de Servicio;0;0
+13;Digitador;0;0
+14;Recepcionista;0;0
+15;Mensajero;0;0
+16;Servicio de Mantenimiento;0;0
