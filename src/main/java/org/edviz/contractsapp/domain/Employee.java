@@ -28,7 +28,7 @@ public class Employee implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "doc_id", nullable = false)
+    @Column(name = "doc_id", unique = true, nullable = false)
     private String docId;
 
     @NotNull
@@ -40,7 +40,7 @@ public class Employee implements Serializable {
     private String lastName;
 
     @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "phone_number")

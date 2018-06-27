@@ -22,7 +22,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="doc_id" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_employee_doc_id"/>
             </column>
 
             <column name="first_name" type="varchar(255)">
@@ -34,7 +34,7 @@
             </column>
 
             <column name="email" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_employee_email"/>
             </column>
 
             <column name="phone_number" type="varchar(255)">
@@ -51,7 +51,32 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
+        <createIndex indexName="idx_employee_doc_id"
+                     tableName="employee"
+                     unique="true">
+            <column name="doc_id" type="varchar(255)"/>
+        </createIndex>
+
+        <createIndex indexName="idx_employee_first_last_name"
+                     tableName="employee"
+                     unique="true">
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+        </createIndex>
+
+        <createIndex indexName="idx_employee_email"
+                     tableName="employee"
+                     unique="true">
+            <column name="email" type="varchar(255)"/>
+        </createIndex>
+
+        <loadData encoding="UTF-8"
+                  file="config/db/employees.csv"
+                  separator=";"
+                  tableName="employee">
+        </loadData>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
