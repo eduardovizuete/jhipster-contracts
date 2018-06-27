@@ -34,8 +34,19 @@ entity Job {
   maxSalary Long required min(0)
 }
 
+entity Employee {
+  docId String required,
+  firstName String required,
+  lastName String required,
+  email String required,
+  phoneNumber String,
+  hireDate LocalDate required,
+  salary Long required min(0)
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination
 paginate Department with pagination
 paginate Job with pagination
+paginate Employee with pagination
