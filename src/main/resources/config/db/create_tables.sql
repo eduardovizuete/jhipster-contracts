@@ -158,3 +158,68 @@ CREATE UNIQUE INDEX idx_job_name
     ON public.job USING btree
     (title COLLATE pg_catalog."default")
     TABLESPACE pg_default;
+
+----------------------------------------------------------------------
+
+-- Table: public.employee
+
+-- DROP TABLE public.employee;
+
+CREATE TABLE public.employee
+(
+    id bigint NOT NULL,
+    doc_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    first_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    last_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    phone_number character varying(255) COLLATE pg_catalog."default",
+    hire_date date NOT NULL,
+    salary bigint NOT NULL,
+    job_id bigint NOT NULL,
+    department_id bigint NOT NULL,
+    CONSTRAINT pk_employee PRIMARY KEY (id),
+    CONSTRAINT ux_employee_doc_id UNIQUE (doc_id),
+    CONSTRAINT ux_employee_email UNIQUE (email),
+    CONSTRAINT fk_employee_department_id FOREIGN KEY (department_id)
+        REFERENCES public.department (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_employee_job_id FOREIGN KEY (job_id)
+        REFERENCES public.job (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.employee
+    OWNER to contractsappuser;
+
+-- Index: idx_employee_doc_id
+
+-- DROP INDEX public.idx_employee_doc_id;
+
+CREATE UNIQUE INDEX idx_employee_doc_id
+    ON public.employee USING btree
+    (doc_id COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
+-- Index: idx_employee_email
+
+-- DROP INDEX public.idx_employee_email;
+
+CREATE UNIQUE INDEX idx_employee_email
+    ON public.employee USING btree
+    (email COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
+-- Index: idx_employee_first_last_name
+
+-- DROP INDEX public.idx_employee_first_last_name;
+
+CREATE UNIQUE INDEX idx_employee_first_last_name
+    ON public.employee USING btree
+    (first_name COLLATE pg_catalog."default", last_name COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
