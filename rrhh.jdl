@@ -48,6 +48,10 @@ relationship ManyToOne {
   Employee{job(title) required} to Job{employees}
 }
 
+relationship ManyToOne {
+  Employee{department(name) required} to Department{employees}
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination

@@ -24,7 +24,8 @@
             "phoneNumber": "Phone Number",
             "hireDate": "Hire Date",
             "salary": "Salary",
-            "job": "Job"
+            "job": "Job",
+            "department": "Department"
         }
     }
 }

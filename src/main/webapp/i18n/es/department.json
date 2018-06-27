@@ -18,7 +18,8 @@
                 "title": "Department"
             },
             "name": "Name",
-            "location": "Location"
+            "location": "Location",
+            "employees": "Employees"
         }
     }
 }

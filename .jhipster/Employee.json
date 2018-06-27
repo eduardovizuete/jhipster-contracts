@@ -7,6 +7,13 @@
             "relationshipName": "job",
             "otherEntityName": "job",
             "otherEntityField": "title"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "department",
+            "otherEntityName": "department",
+            "otherEntityField": "name"
         }
     ],
     "fields": [

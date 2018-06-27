@@ -48,6 +48,7 @@ describe('Employee e2e test', () => {
         employeeDialogPage.setSalaryInput('5');
         expect(employeeDialogPage.getSalaryInput()).toMatch('5');
         employeeDialogPage.jobSelectLastOption();
+        employeeDialogPage.departmentSelectLastOption();
         employeeDialogPage.save();
         expect(employeeDialogPage.getSaveButton().isPresent()).toBeFalsy();
     });*/
@@ -82,6 +83,7 @@ export class EmployeeDialogPage {
     hireDateInput = element(by.css('input#field_hireDate'));
     salaryInput = element(by.css('input#field_salary'));
     jobSelect = element(by.css('select#field_job'));
+    departmentSelect = element(by.css('select#field_department'));
 
     getModalTitle() {
         return this.modalTitle.getAttribute('jhiTranslate');
@@ -157,6 +159,22 @@ export class EmployeeDialogPage {
 
     getJobSelectedOption = function() {
         return this.jobSelect.element(by.css('option:checked')).getText();
+    };
+
+    departmentSelectLastOption = function() {
+        this.departmentSelect.all(by.tagName('option')).last().click();
+    };
+
+    departmentSelectOption = function(option) {
+        this.departmentSelect.sendKeys(option);
+    };
+
+    getDepartmentSelect = function() {
+        return this.departmentSelect;
+    };
+
+    getDepartmentSelectedOption = function() {
+        return this.departmentSelect.element(by.css('option:checked')).getText();
     };
 
     save() {

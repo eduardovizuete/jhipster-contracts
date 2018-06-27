@@ -4,6 +4,7 @@ import org.edviz.contractsapp.ContractsApp;
 
 import org.edviz.contractsapp.domain.Employee;
 import org.edviz.contractsapp.domain.Job;
+import org.edviz.contractsapp.domain.Department;
 import org.edviz.contractsapp.repository.EmployeeRepository;
 import org.edviz.contractsapp.repository.search.EmployeeSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.ExceptionTranslator;
@@ -116,6 +117,11 @@ public class EmployeeResourceIntTest {
         em.persist(job);
         em.flush();
         employee.setJob(job);
+        // Add required entity
+        Department department = DepartmentResourceIntTest.createEntity(em);
+        em.persist(department);
+        em.flush();
+        employee.setDepartment(department);
         return employee;
     }
 

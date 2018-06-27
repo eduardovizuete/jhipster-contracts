@@ -11,6 +11,7 @@ export class Employee implements BaseEntity {
         public hireDate?: any,
         public salary?: number,
         public job?: BaseEntity,
+        public department?: BaseEntity,
     ) {
     }
 }

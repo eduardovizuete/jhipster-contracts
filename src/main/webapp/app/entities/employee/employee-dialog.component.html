@@ -110,6 +110,19 @@
                 This field is required.
             </small>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="contractsApp.employee.department" for="field_department">Department</label>
+            <select class="form-control" id="field_department" name="department" [(ngModel)]="employee.department"  required>
+                <option *ngIf="!editForm.value.department" [ngValue]="null" selected></option>
+                <option [ngValue]="departmentOption.id === employee.department?.id ? employee.department : departmentOption" *ngFor="let departmentOption of departments; trackBy: trackDepartmentById">{{departmentOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.department?.dirty && editForm.controls.department?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.department?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

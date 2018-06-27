@@ -38,6 +38,12 @@
                 <a [routerLink]="['/job', employee.job?.id]">{{employee.job?.title}}</a>
             </div>
         </dd>
+        <dt><span jhiTranslate="contractsApp.employee.department">Department</span></dt>
+        <dd>
+            <div *ngIf="employee.department">
+                <a [routerLink]="['/department', employee.department?.id]">{{employee.department?.name}}</a>
+            </div>
+        </dd>
     </dl>
 
     <button type="submit"

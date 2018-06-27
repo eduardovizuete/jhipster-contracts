@@ -10,6 +10,7 @@ import { Employee } from './employee.model';
 import { EmployeePopupService } from './employee-popup.service';
 import { EmployeeService } from './employee.service';
 import { Job, JobService } from '../job';
+import { Department, DepartmentService } from '../department';
 
 @Component({
     selector: 'jhi-employee-dialog',
@@ -21,6 +22,8 @@ export class EmployeeDialogComponent implements OnInit {
     isSaving: boolean;
 
     jobs: Job[];
+
+    departments: Department[];
     hireDateDp: any;
 
     constructor(
@@ -28,6 +31,7 @@ export class EmployeeDialogComponent implements OnInit {
         private jhiAlertService: JhiAlertService,
         private employeeService: EmployeeService,
         private jobService: JobService,
+        private departmentService: DepartmentService,
         private eventManager: JhiEventManager
     ) {
     }
@@ -36,6 +40,8 @@ export class EmployeeDialogComponent implements OnInit {
         this.isSaving = false;
         this.jobService.query()
             .subscribe((res: HttpResponse<Job[]>) => { this.jobs = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.departmentService.query()
+            .subscribe((res: HttpResponse<Department[]>) => { this.departments = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -73,6 +79,10 @@ export class EmployeeDialogComponent implements OnInit {
     }
 
     trackJobById(index: number, item: Job) {
+        return item.id;
+    }
+
+    trackDepartmentById(index: number, item: Department) {
         return item.id;
     }
 }
