@@ -4,6 +4,7 @@ import { ContractsCountryModule } from './country/country.module';
 import { ContractsCityModule } from './city/city.module';
 import { ContractsLocationModule } from './location/location.module';
 import { ContractsDepartmentModule } from './department/department.module';
+import { ContractsJobModule } from './job/job.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -12,6 +13,7 @@ import { ContractsDepartmentModule } from './department/department.module';
         ContractsCityModule,
         ContractsLocationModule,
         ContractsDepartmentModule,
+        ContractsJobModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

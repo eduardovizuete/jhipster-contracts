@@ -11,6 +11,7 @@
                 "city": "City",
                 "location": "Location",
                 "department": "Department",
+                "job": "Job",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

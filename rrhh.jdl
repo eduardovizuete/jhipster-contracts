@@ -28,8 +28,14 @@ relationship ManyToOne {
   Department{location(streetAddress) required} to Location{departments}
 }
 
+entity Job {
+  title String required,
+  minSalary Long required min(0),
+  maxSalary Long required min(0)
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination
 paginate Department with pagination
-
+paginate Job with pagination

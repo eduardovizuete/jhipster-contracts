@@ -45,6 +45,7 @@ public class CacheConfiguration {
             cm.createCache(org.edviz.contractsapp.domain.Location.class.getName(), jcacheConfiguration);
             cm.createCache(org.edviz.contractsapp.domain.Location.class.getName() + ".departments", jcacheConfiguration);
             cm.createCache(org.edviz.contractsapp.domain.Department.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Job.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
