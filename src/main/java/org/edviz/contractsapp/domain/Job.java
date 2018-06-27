@@ -27,7 +27,7 @@ public class Job implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", unique = true, nullable = false)
     private String title;
 
     @NotNull

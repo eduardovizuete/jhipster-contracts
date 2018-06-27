@@ -126,3 +126,35 @@ CREATE UNIQUE INDEX idx_department_name_location_id
     ON public.department USING btree
     (name COLLATE pg_catalog."default", location_id)
     TABLESPACE pg_default;
+
+----------------------------------------------------------------------
+
+-- Table: public.job
+
+-- DROP TABLE public.job;
+
+CREATE TABLE public.job
+(
+    id bigint NOT NULL,
+    title character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    min_salary bigint NOT NULL,
+    max_salary bigint NOT NULL,
+    CONSTRAINT pk_job PRIMARY KEY (id),
+    CONSTRAINT ux_job_name UNIQUE (title)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.job
+    OWNER to contractsappuser;
+
+-- Index: idx_job_name
+
+-- DROP INDEX public.idx_job_name;
+
+CREATE UNIQUE INDEX idx_job_name
+    ON public.job USING btree
+    (title COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
