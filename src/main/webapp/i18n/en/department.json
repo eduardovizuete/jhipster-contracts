@@ -19,7 +19,8 @@
             },
             "name": "Name",
             "location": "Location",
-            "employees": "Employees"
+            "employees": "Employees",
+            "managers": "Managers"
         }
     }
 }

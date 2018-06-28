@@ -14,6 +14,12 @@
             "relationshipName": "department",
             "otherEntityName": "department",
             "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "managers",
+            "otherEntityName": "manager",
+            "otherEntityRelationshipName": "employee"
         }
     ],
     "fields": [

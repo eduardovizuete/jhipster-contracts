@@ -25,7 +25,8 @@
             "hireDate": "Hire Date",
             "salary": "Salary",
             "job": "Job",
-            "department": "Department"
+            "department": "Department",
+            "managers": "Managers"
         }
     }
 }

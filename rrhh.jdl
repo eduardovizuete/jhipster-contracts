@@ -52,9 +52,18 @@ relationship ManyToOne {
   Employee{department(name) required} to Department{employees}
 }
 
+entity Manager {
+}
+
+relationship ManyToOne {
+  Manager{department(name) required} to Department{managers},
+  Manager{employee(lastName) required} to Employee{managers}
+}
+
 paginate Country with pagination
 paginate City with pagination
 paginate Location with pagination
 paginate Department with pagination
 paginate Job with pagination
 paginate Employee with pagination
+paginate Manager with pagination

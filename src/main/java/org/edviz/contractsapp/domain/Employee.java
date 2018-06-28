@@ -1,5 +1,6 @@
 package org.edviz.contractsapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -9,6 +10,8 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -62,6 +65,11 @@ public class Employee implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     private Department department;
+
+    @OneToMany(mappedBy = "employee")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Manager> managers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -187,6 +195,31 @@ public class Employee implements Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Set<Manager> getManagers() {
+        return managers;
+    }
+
+    public Employee managers(Set<Manager> managers) {
+        this.managers = managers;
+        return this;
+    }
+
+    public Employee addManagers(Manager manager) {
+        this.managers.add(manager);
+        manager.setEmployee(this);
+        return this;
+    }
+
+    public Employee removeManagers(Manager manager) {
+        this.managers.remove(manager);
+        manager.setEmployee(null);
+        return this;
+    }
+
+    public void setManagers(Set<Manager> managers) {
+        this.managers = managers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

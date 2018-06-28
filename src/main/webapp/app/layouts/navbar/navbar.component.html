@@ -65,6 +65,12 @@
                             <span jhiTranslate="global.menu.entities.employee">Employee</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="manager" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span jhiTranslate="global.menu.entities.manager">Manager</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

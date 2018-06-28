@@ -42,6 +42,11 @@ public class Department implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Employee> employees = new HashSet<>();
 
+    @OneToMany(mappedBy = "department")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Manager> managers = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -100,6 +105,31 @@ public class Department implements Serializable {
 
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
+    }
+
+    public Set<Manager> getManagers() {
+        return managers;
+    }
+
+    public Department managers(Set<Manager> managers) {
+        this.managers = managers;
+        return this;
+    }
+
+    public Department addManagers(Manager manager) {
+        this.managers.add(manager);
+        manager.setDepartment(this);
+        return this;
+    }
+
+    public Department removeManagers(Manager manager) {
+        this.managers.remove(manager);
+        manager.setDepartment(null);
+        return this;
+    }
+
+    public void setManagers(Set<Manager> managers) {
+        this.managers = managers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

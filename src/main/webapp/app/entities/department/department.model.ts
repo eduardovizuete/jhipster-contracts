@@ -6,6 +6,7 @@ export class Department implements BaseEntity {
         public name?: string,
         public location?: BaseEntity,
         public employees?: BaseEntity[],
+        public managers?: BaseEntity[],
     ) {
     }
 }

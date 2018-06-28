@@ -12,6 +12,7 @@ export class Employee implements BaseEntity {
         public salary?: number,
         public job?: BaseEntity,
         public department?: BaseEntity,
+        public managers?: BaseEntity[],
     ) {
     }
 }

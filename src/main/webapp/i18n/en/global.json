@@ -13,6 +13,7 @@
                 "department": "Department",
                 "job": "Job",
                 "employee": "Employee",
+                "manager": "Manager",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
