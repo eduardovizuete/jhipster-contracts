@@ -31,7 +31,20 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
+        <createIndex indexName="idx_manager_department_id_employee_id"
+                     tableName="manager"
+                     unique="true">
+            <column name="department_id" type="bigint"/>
+            <column name="employee_id" type="bigint"/>
+        </createIndex>
+
+        <loadData encoding="UTF-8"
+                  file="config/db/managers.csv"
+                  separator=";"
+                  tableName="manager">
+        </loadData>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

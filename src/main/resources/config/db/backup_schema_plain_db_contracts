@@ -5,7 +5,7 @@
 -- Dumped from database version 10.4
 -- Dumped by pg_dump version 10.4
 
--- Started on 2018-06-27 18:24:59
+-- Started on 2018-06-29 12:44:00
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +26,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2922 (class 0 OID 0)
+-- TOC entry 2932 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -39,7 +39,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 205 (class 1259 OID 22708)
+-- TOC entry 205 (class 1259 OID 23322)
 -- Name: city; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -53,7 +53,7 @@ CREATE TABLE public.city (
 ALTER TABLE public.city OWNER TO contractsappuser;
 
 --
--- TOC entry 204 (class 1259 OID 22700)
+-- TOC entry 204 (class 1259 OID 23314)
 -- Name: country; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -66,7 +66,7 @@ CREATE TABLE public.country (
 ALTER TABLE public.country OWNER TO contractsappuser;
 
 --
--- TOC entry 197 (class 1259 OID 22640)
+-- TOC entry 197 (class 1259 OID 23254)
 -- Name: databasechangelog; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -91,7 +91,7 @@ CREATE TABLE public.databasechangelog (
 ALTER TABLE public.databasechangelog OWNER TO contractsappuser;
 
 --
--- TOC entry 196 (class 1259 OID 22635)
+-- TOC entry 196 (class 1259 OID 23249)
 -- Name: databasechangeloglock; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -106,7 +106,7 @@ CREATE TABLE public.databasechangeloglock (
 ALTER TABLE public.databasechangeloglock OWNER TO contractsappuser;
 
 --
--- TOC entry 207 (class 1259 OID 22722)
+-- TOC entry 207 (class 1259 OID 23336)
 -- Name: department; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -120,7 +120,7 @@ CREATE TABLE public.department (
 ALTER TABLE public.department OWNER TO contractsappuser;
 
 --
--- TOC entry 209 (class 1259 OID 22739)
+-- TOC entry 209 (class 1259 OID 23353)
 -- Name: employee; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -141,7 +141,7 @@ CREATE TABLE public.employee (
 ALTER TABLE public.employee OWNER TO contractsappuser;
 
 --
--- TOC entry 198 (class 1259 OID 22646)
+-- TOC entry 198 (class 1259 OID 23260)
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: contractsappuser
 --
 
@@ -156,7 +156,7 @@ CREATE SEQUENCE public.hibernate_sequence
 ALTER TABLE public.hibernate_sequence OWNER TO contractsappuser;
 
 --
--- TOC entry 200 (class 1259 OID 22663)
+-- TOC entry 200 (class 1259 OID 23277)
 -- Name: jhi_authority; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -168,7 +168,7 @@ CREATE TABLE public.jhi_authority (
 ALTER TABLE public.jhi_authority OWNER TO contractsappuser;
 
 --
--- TOC entry 202 (class 1259 OID 22683)
+-- TOC entry 202 (class 1259 OID 23297)
 -- Name: jhi_persistent_audit_event; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -183,7 +183,7 @@ CREATE TABLE public.jhi_persistent_audit_event (
 ALTER TABLE public.jhi_persistent_audit_event OWNER TO contractsappuser;
 
 --
--- TOC entry 203 (class 1259 OID 22688)
+-- TOC entry 203 (class 1259 OID 23302)
 -- Name: jhi_persistent_audit_evt_data; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -197,7 +197,7 @@ CREATE TABLE public.jhi_persistent_audit_evt_data (
 ALTER TABLE public.jhi_persistent_audit_evt_data OWNER TO contractsappuser;
 
 --
--- TOC entry 199 (class 1259 OID 22648)
+-- TOC entry 199 (class 1259 OID 23262)
 -- Name: jhi_user; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -224,7 +224,7 @@ CREATE TABLE public.jhi_user (
 ALTER TABLE public.jhi_user OWNER TO contractsappuser;
 
 --
--- TOC entry 201 (class 1259 OID 22668)
+-- TOC entry 201 (class 1259 OID 23282)
 -- Name: jhi_user_authority; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -237,7 +237,7 @@ CREATE TABLE public.jhi_user_authority (
 ALTER TABLE public.jhi_user_authority OWNER TO contractsappuser;
 
 --
--- TOC entry 208 (class 1259 OID 22731)
+-- TOC entry 208 (class 1259 OID 23345)
 -- Name: job; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -252,7 +252,7 @@ CREATE TABLE public.job (
 ALTER TABLE public.job OWNER TO contractsappuser;
 
 --
--- TOC entry 206 (class 1259 OID 22714)
+-- TOC entry 206 (class 1259 OID 23328)
 -- Name: location; Type: TABLE; Schema: public; Owner: contractsappuser
 --
 
@@ -268,7 +268,21 @@ CREATE TABLE public.location (
 ALTER TABLE public.location OWNER TO contractsappuser;
 
 --
--- TOC entry 2910 (class 0 OID 22708)
+-- TOC entry 210 (class 1259 OID 23368)
+-- Name: manager; Type: TABLE; Schema: public; Owner: contractsappuser
+--
+
+CREATE TABLE public.manager (
+    id bigint NOT NULL,
+    department_id bigint NOT NULL,
+    employee_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.manager OWNER TO contractsappuser;
+
+--
+-- TOC entry 2919 (class 0 OID 23322)
 -- Dependencies: 205
 -- Data for Name: city; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -328,7 +342,7 @@ COPY public.city (id, name, country_id) FROM stdin;
 
 
 --
--- TOC entry 2909 (class 0 OID 22700)
+-- TOC entry 2918 (class 0 OID 23314)
 -- Dependencies: 204
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -532,29 +546,31 @@ COPY public.country (id, name) FROM stdin;
 
 
 --
--- TOC entry 2902 (class 0 OID 22640)
+-- TOC entry 2911 (class 0 OID 23254)
 -- Dependencies: 197
 -- Data for Name: databasechangelog; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.databasechangelog (id, author, filename, dateexecuted, orderexecuted, exectype, md5sum, description, comments, tag, liquibase, contexts, labels, deployment_id) FROM stdin;
-00000000000000	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-27 18:14:02.788111	1	EXECUTED	7:a6235f40597a13436aa36c6d61db2269	createSequence sequenceName=hibernate_sequence		\N	3.5.4	\N	\N	0141242705
-00000000000001	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-27 18:14:03.465012	2	EXECUTED	7:52839c39ca98b24936251e7ab4eb10bb	createTable tableName=jhi_user; createIndex indexName=idx_user_login, tableName=jhi_user; createIndex indexName=idx_user_email, tableName=jhi_user; createTable tableName=jhi_authority; createTable tableName=jhi_user_authority; addPrimaryKey tableN...		\N	3.5.4	\N	\N	0141242705
-20180531010508-1	jhipster	config/liquibase/changelog/20180531010508_added_entity_Country.xml	2018-06-27 18:14:03.659958	3	EXECUTED	7:fa65240ee27eabf430896167d5f51e1b	createTable tableName=country; createIndex indexName=idx_country_name, tableName=country; loadData tableName=country		\N	3.5.4	\N	\N	0141242705
-20180531222526-1	jhipster	config/liquibase/changelog/20180531222526_added_entity_City.xml	2018-06-27 18:14:03.751988	4	EXECUTED	7:d4b40bf0f2621b7f8882f959c61256b2	createTable tableName=city; createIndex indexName=idx_city_name_country_id, tableName=city; loadData tableName=city		\N	3.5.4	\N	\N	0141242705
-20180614203550-1	jhipster	config/liquibase/changelog/20180614203550_added_entity_Location.xml	2018-06-27 18:14:03.890133	5	EXECUTED	7:d83d367aea0e6cebda5468164c90b267	createTable tableName=location; loadData tableName=location		\N	3.5.4	\N	\N	0141242705
-20180627024726-1	jhipster	config/liquibase/changelog/20180627024726_added_entity_Department.xml	2018-06-27 18:14:04.172729	6	EXECUTED	7:de9dd8d921c68d541c55b1047064f94b	createTable tableName=department; createIndex indexName=idx_department_name, tableName=department; createIndex indexName=idx_department_name_location_id, tableName=department; loadData tableName=department		\N	3.5.4	\N	\N	0141242705
-20180627141552-1	jhipster	config/liquibase/changelog/20180627141552_added_entity_Job.xml	2018-06-27 18:14:04.379058	7	EXECUTED	7:8b33627162220f97126b1a3a3196b95f	createTable tableName=job; createIndex indexName=idx_job_name, tableName=job; loadData tableName=job		\N	3.5.4	\N	\N	0141242705
-20180627164042-1	jhipster	config/liquibase/changelog/20180627164042_added_entity_Employee.xml	2018-06-27 18:14:04.632368	8	EXECUTED	7:866fa2df3a5cf6af914e18961e5d35fe	createTable tableName=employee; createIndex indexName=idx_employee_doc_id, tableName=employee; createIndex indexName=idx_employee_first_last_name, tableName=employee; createIndex indexName=idx_employee_email, tableName=employee; loadData tableName...		\N	3.5.4	\N	\N	0141242705
-20180531222526-2	jhipster	config/liquibase/changelog/20180531222526_added_entity_constraints_City.xml	2018-06-27 18:14:04.996295	9	EXECUTED	7:fa0122236985eb7b9bfa9a599e2e8598	addForeignKeyConstraint baseTableName=city, constraintName=fk_city_country_id, referencedTableName=country		\N	3.5.4	\N	\N	0141242705
-20180614203550-2	jhipster	config/liquibase/changelog/20180614203550_added_entity_constraints_Location.xml	2018-06-27 18:14:05.005886	10	EXECUTED	7:ccfa141a385180e6f01f9fc5c34fa3f4	addForeignKeyConstraint baseTableName=location, constraintName=fk_location_city_id, referencedTableName=city		\N	3.5.4	\N	\N	0141242705
-20180627024726-2	jhipster	config/liquibase/changelog/20180627024726_added_entity_constraints_Department.xml	2018-06-27 18:14:05.015562	11	EXECUTED	7:da2cee8b3067f23e49cf1f07cb2aa045	addForeignKeyConstraint baseTableName=department, constraintName=fk_department_location_id, referencedTableName=location		\N	3.5.4	\N	\N	0141242705
-20180627164042-2	jhipster	config/liquibase/changelog/20180627164042_added_entity_constraints_Employee.xml	2018-06-27 18:14:05.028825	12	EXECUTED	7:346674a27cebddbb56e9225236a5ecfd	addForeignKeyConstraint baseTableName=employee, constraintName=fk_employee_job_id, referencedTableName=job; addForeignKeyConstraint baseTableName=employee, constraintName=fk_employee_department_id, referencedTableName=department		\N	3.5.4	\N	\N	0141242705
+00000000000000	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-29 12:39:05.369378	1	EXECUTED	7:a6235f40597a13436aa36c6d61db2269	createSequence sequenceName=hibernate_sequence		\N	3.5.4	\N	\N	0293945292
+00000000000001	jhipster	config/liquibase/changelog/00000000000000_initial_schema.xml	2018-06-29 12:39:06.206968	2	EXECUTED	7:52839c39ca98b24936251e7ab4eb10bb	createTable tableName=jhi_user; createIndex indexName=idx_user_login, tableName=jhi_user; createIndex indexName=idx_user_email, tableName=jhi_user; createTable tableName=jhi_authority; createTable tableName=jhi_user_authority; addPrimaryKey tableN...		\N	3.5.4	\N	\N	0293945292
+20180531010508-1	jhipster	config/liquibase/changelog/20180531010508_added_entity_Country.xml	2018-06-29 12:39:06.392111	3	EXECUTED	7:fa65240ee27eabf430896167d5f51e1b	createTable tableName=country; createIndex indexName=idx_country_name, tableName=country; loadData tableName=country		\N	3.5.4	\N	\N	0293945292
+20180531222526-1	jhipster	config/liquibase/changelog/20180531222526_added_entity_City.xml	2018-06-29 12:39:06.516025	4	EXECUTED	7:d4b40bf0f2621b7f8882f959c61256b2	createTable tableName=city; createIndex indexName=idx_city_name_country_id, tableName=city; loadData tableName=city		\N	3.5.4	\N	\N	0293945292
+20180614203550-1	jhipster	config/liquibase/changelog/20180614203550_added_entity_Location.xml	2018-06-29 12:39:06.621399	5	EXECUTED	7:d83d367aea0e6cebda5468164c90b267	createTable tableName=location; loadData tableName=location		\N	3.5.4	\N	\N	0293945292
+20180627024726-1	jhipster	config/liquibase/changelog/20180627024726_added_entity_Department.xml	2018-06-29 12:39:06.818075	6	EXECUTED	7:de9dd8d921c68d541c55b1047064f94b	createTable tableName=department; createIndex indexName=idx_department_name, tableName=department; createIndex indexName=idx_department_name_location_id, tableName=department; loadData tableName=department		\N	3.5.4	\N	\N	0293945292
+20180627141552-1	jhipster	config/liquibase/changelog/20180627141552_added_entity_Job.xml	2018-06-29 12:39:07.07147	7	EXECUTED	7:8b33627162220f97126b1a3a3196b95f	createTable tableName=job; createIndex indexName=idx_job_name, tableName=job; loadData tableName=job		\N	3.5.4	\N	\N	0293945292
+20180627164042-1	jhipster	config/liquibase/changelog/20180627164042_added_entity_Employee.xml	2018-06-29 12:39:07.297706	8	EXECUTED	7:866fa2df3a5cf6af914e18961e5d35fe	createTable tableName=employee; createIndex indexName=idx_employee_doc_id, tableName=employee; createIndex indexName=idx_employee_first_last_name, tableName=employee; createIndex indexName=idx_employee_email, tableName=employee; loadData tableName...		\N	3.5.4	\N	\N	0293945292
+20180628132904-1	jhipster	config/liquibase/changelog/20180628132904_added_entity_Manager.xml	2018-06-29 12:39:07.383819	9	EXECUTED	7:01913e4128f0462f185e51d7148da006	createTable tableName=manager; createIndex indexName=idx_manager_department_id_employee_id, tableName=manager; loadData tableName=manager		\N	3.5.4	\N	\N	0293945292
+20180531222526-2	jhipster	config/liquibase/changelog/20180531222526_added_entity_constraints_City.xml	2018-06-29 12:39:07.394146	10	EXECUTED	7:fa0122236985eb7b9bfa9a599e2e8598	addForeignKeyConstraint baseTableName=city, constraintName=fk_city_country_id, referencedTableName=country		\N	3.5.4	\N	\N	0293945292
+20180614203550-2	jhipster	config/liquibase/changelog/20180614203550_added_entity_constraints_Location.xml	2018-06-29 12:39:07.401826	11	EXECUTED	7:ccfa141a385180e6f01f9fc5c34fa3f4	addForeignKeyConstraint baseTableName=location, constraintName=fk_location_city_id, referencedTableName=city		\N	3.5.4	\N	\N	0293945292
+20180627024726-2	jhipster	config/liquibase/changelog/20180627024726_added_entity_constraints_Department.xml	2018-06-29 12:39:07.409514	12	EXECUTED	7:da2cee8b3067f23e49cf1f07cb2aa045	addForeignKeyConstraint baseTableName=department, constraintName=fk_department_location_id, referencedTableName=location		\N	3.5.4	\N	\N	0293945292
+20180627164042-2	jhipster	config/liquibase/changelog/20180627164042_added_entity_constraints_Employee.xml	2018-06-29 12:39:07.420413	13	EXECUTED	7:346674a27cebddbb56e9225236a5ecfd	addForeignKeyConstraint baseTableName=employee, constraintName=fk_employee_job_id, referencedTableName=job; addForeignKeyConstraint baseTableName=employee, constraintName=fk_employee_department_id, referencedTableName=department		\N	3.5.4	\N	\N	0293945292
+20180628132904-2	jhipster	config/liquibase/changelog/20180628132904_added_entity_constraints_Manager.xml	2018-06-29 12:39:07.430441	14	EXECUTED	7:b4c565a724720bb57d5d1acc617ad8c9	addForeignKeyConstraint baseTableName=manager, constraintName=fk_manager_department_id, referencedTableName=department; addForeignKeyConstraint baseTableName=manager, constraintName=fk_manager_employee_id, referencedTableName=employee		\N	3.5.4	\N	\N	0293945292
 \.
 
 
 --
--- TOC entry 2901 (class 0 OID 22635)
+-- TOC entry 2910 (class 0 OID 23249)
 -- Dependencies: 196
 -- Data for Name: databasechangeloglock; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -565,7 +581,7 @@ COPY public.databasechangeloglock (id, locked, lockgranted, lockedby) FROM stdin
 
 
 --
--- TOC entry 2912 (class 0 OID 22722)
+-- TOC entry 2921 (class 0 OID 23336)
 -- Dependencies: 207
 -- Data for Name: department; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -582,7 +598,7 @@ COPY public.department (id, name, location_id) FROM stdin;
 
 
 --
--- TOC entry 2914 (class 0 OID 22739)
+-- TOC entry 2923 (class 0 OID 23353)
 -- Dependencies: 209
 -- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -633,7 +649,7 @@ COPY public.employee (id, doc_id, first_name, last_name, email, phone_number, hi
 
 
 --
--- TOC entry 2905 (class 0 OID 22663)
+-- TOC entry 2914 (class 0 OID 23277)
 -- Dependencies: 200
 -- Data for Name: jhi_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -645,17 +661,18 @@ ROLE_USER
 
 
 --
--- TOC entry 2907 (class 0 OID 22683)
+-- TOC entry 2916 (class 0 OID 23297)
 -- Dependencies: 202
 -- Data for Name: jhi_persistent_audit_event; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.jhi_persistent_audit_event (event_id, principal, event_date, event_type) FROM stdin;
+951	user	2018-06-29 12:40:07.152	AUTHENTICATION_SUCCESS
 \.
 
 
 --
--- TOC entry 2908 (class 0 OID 22688)
+-- TOC entry 2917 (class 0 OID 23302)
 -- Dependencies: 203
 -- Data for Name: jhi_persistent_audit_evt_data; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -665,21 +682,21 @@ COPY public.jhi_persistent_audit_evt_data (event_id, name, value) FROM stdin;
 
 
 --
--- TOC entry 2904 (class 0 OID 22648)
+-- TOC entry 2913 (class 0 OID 23262)
 -- Dependencies: 199
 -- Data for Name: jhi_user; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
 
 COPY public.jhi_user (id, login, password_hash, first_name, last_name, email, image_url, activated, lang_key, activation_key, reset_key, created_by, created_date, reset_date, last_modified_by, last_modified_date) FROM stdin;
-1	system	$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG	System	System	system@localhost		t	en	\N	\N	system	2018-06-27 18:14:02.799309	\N	system	\N
-2	anonymoususer	$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO	Anonymous	User	anonymous@localhost		t	en	\N	\N	system	2018-06-27 18:14:02.799309	\N	system	\N
-3	admin	$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC	Administrator	Administrator	admin@localhost		t	en	\N	\N	system	2018-06-27 18:14:02.799309	\N	system	\N
-4	user	$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K	User	User	user@localhost		t	en	\N	\N	system	2018-06-27 18:14:02.799309	\N	system	\N
+1	system	$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG	System	System	system@localhost		t	en	\N	\N	system	2018-06-29 12:39:05.378411	\N	system	\N
+2	anonymoususer	$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO	Anonymous	User	anonymous@localhost		t	en	\N	\N	system	2018-06-29 12:39:05.378411	\N	system	\N
+3	admin	$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC	Administrator	Administrator	admin@localhost		t	en	\N	\N	system	2018-06-29 12:39:05.378411	\N	system	\N
+4	user	$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K	User	User	user@localhost		t	en	\N	\N	system	2018-06-29 12:39:05.378411	\N	system	\N
 \.
 
 
 --
--- TOC entry 2906 (class 0 OID 22668)
+-- TOC entry 2915 (class 0 OID 23282)
 -- Dependencies: 201
 -- Data for Name: jhi_user_authority; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -694,7 +711,7 @@ COPY public.jhi_user_authority (user_id, authority_name) FROM stdin;
 
 
 --
--- TOC entry 2913 (class 0 OID 22731)
+-- TOC entry 2922 (class 0 OID 23345)
 -- Dependencies: 208
 -- Data for Name: job; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -721,7 +738,7 @@ COPY public.job (id, title, min_salary, max_salary) FROM stdin;
 
 
 --
--- TOC entry 2911 (class 0 OID 22714)
+-- TOC entry 2920 (class 0 OID 23328)
 -- Dependencies: 206
 -- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: contractsappuser
 --
@@ -733,16 +750,33 @@ COPY public.location (id, street_address, state_province, postal_code, city_id) 
 
 
 --
--- TOC entry 2923 (class 0 OID 0)
+-- TOC entry 2924 (class 0 OID 23368)
+-- Dependencies: 210
+-- Data for Name: manager; Type: TABLE DATA; Schema: public; Owner: contractsappuser
+--
+
+COPY public.manager (id, department_id, employee_id) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+6	6	6
+7	7	40
+\.
+
+
+--
+-- TOC entry 2933 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: contractsappuser
 --
 
-SELECT pg_catalog.setval('public.hibernate_sequence', 1000, false);
+SELECT pg_catalog.setval('public.hibernate_sequence', 1000, true);
 
 
 --
--- TOC entry 2741 (class 2606 OID 22692)
+-- TOC entry 2745 (class 2606 OID 23306)
 -- Name: jhi_persistent_audit_evt_data jhi_persistent_audit_evt_data_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -751,7 +785,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
 
 
 --
--- TOC entry 2735 (class 2606 OID 22672)
+-- TOC entry 2739 (class 2606 OID 23286)
 -- Name: jhi_user_authority jhi_user_authority_pkey; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -760,7 +794,7 @@ ALTER TABLE ONLY public.jhi_user_authority
 
 
 --
--- TOC entry 2749 (class 2606 OID 22712)
+-- TOC entry 2753 (class 2606 OID 23326)
 -- Name: city pk_city; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -769,7 +803,7 @@ ALTER TABLE ONLY public.city
 
 
 --
--- TOC entry 2744 (class 2606 OID 22704)
+-- TOC entry 2748 (class 2606 OID 23318)
 -- Name: country pk_country; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -778,7 +812,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- TOC entry 2723 (class 2606 OID 22639)
+-- TOC entry 2727 (class 2606 OID 23253)
 -- Name: databasechangeloglock pk_databasechangeloglock; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -787,7 +821,7 @@ ALTER TABLE ONLY public.databasechangeloglock
 
 
 --
--- TOC entry 2755 (class 2606 OID 22726)
+-- TOC entry 2759 (class 2606 OID 23340)
 -- Name: department pk_department; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -796,7 +830,7 @@ ALTER TABLE ONLY public.department
 
 
 --
--- TOC entry 2767 (class 2606 OID 22746)
+-- TOC entry 2771 (class 2606 OID 23360)
 -- Name: employee pk_employee; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -805,7 +839,7 @@ ALTER TABLE ONLY public.employee
 
 
 --
--- TOC entry 2733 (class 2606 OID 22667)
+-- TOC entry 2737 (class 2606 OID 23281)
 -- Name: jhi_authority pk_jhi_authority; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -814,7 +848,7 @@ ALTER TABLE ONLY public.jhi_authority
 
 
 --
--- TOC entry 2738 (class 2606 OID 22687)
+-- TOC entry 2742 (class 2606 OID 23301)
 -- Name: jhi_persistent_audit_event pk_jhi_persistent_audit_event; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -823,7 +857,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_event
 
 
 --
--- TOC entry 2727 (class 2606 OID 22656)
+-- TOC entry 2731 (class 2606 OID 23270)
 -- Name: jhi_user pk_jhi_user; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -832,7 +866,7 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2760 (class 2606 OID 22735)
+-- TOC entry 2764 (class 2606 OID 23349)
 -- Name: job pk_job; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -841,7 +875,7 @@ ALTER TABLE ONLY public.job
 
 
 --
--- TOC entry 2751 (class 2606 OID 22721)
+-- TOC entry 2755 (class 2606 OID 23335)
 -- Name: location pk_location; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -850,7 +884,16 @@ ALTER TABLE ONLY public.location
 
 
 --
--- TOC entry 2746 (class 2606 OID 22706)
+-- TOC entry 2778 (class 2606 OID 23372)
+-- Name: manager pk_manager; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT pk_manager PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2750 (class 2606 OID 23320)
 -- Name: country ux_country_name; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -859,7 +902,7 @@ ALTER TABLE ONLY public.country
 
 
 --
--- TOC entry 2757 (class 2606 OID 22728)
+-- TOC entry 2761 (class 2606 OID 23342)
 -- Name: department ux_department_name; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -868,7 +911,7 @@ ALTER TABLE ONLY public.department
 
 
 --
--- TOC entry 2769 (class 2606 OID 22748)
+-- TOC entry 2773 (class 2606 OID 23362)
 -- Name: employee ux_employee_doc_id; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -877,7 +920,7 @@ ALTER TABLE ONLY public.employee
 
 
 --
--- TOC entry 2771 (class 2606 OID 22750)
+-- TOC entry 2775 (class 2606 OID 23364)
 -- Name: employee ux_employee_email; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -886,7 +929,7 @@ ALTER TABLE ONLY public.employee
 
 
 --
--- TOC entry 2762 (class 2606 OID 22737)
+-- TOC entry 2766 (class 2606 OID 23351)
 -- Name: job ux_job_name; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -895,7 +938,7 @@ ALTER TABLE ONLY public.job
 
 
 --
--- TOC entry 2729 (class 2606 OID 22660)
+-- TOC entry 2733 (class 2606 OID 23272)
 -- Name: jhi_user ux_user_email; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -904,7 +947,7 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2731 (class 2606 OID 22658)
+-- TOC entry 2735 (class 2606 OID 23274)
 -- Name: jhi_user ux_user_login; Type: CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -913,7 +956,7 @@ ALTER TABLE ONLY public.jhi_user
 
 
 --
--- TOC entry 2747 (class 1259 OID 22713)
+-- TOC entry 2751 (class 1259 OID 23327)
 -- Name: idx_city_name_country_id; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -921,7 +964,7 @@ CREATE UNIQUE INDEX idx_city_name_country_id ON public.city USING btree (name, c
 
 
 --
--- TOC entry 2742 (class 1259 OID 22707)
+-- TOC entry 2746 (class 1259 OID 23321)
 -- Name: idx_country_name; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -929,7 +972,7 @@ CREATE UNIQUE INDEX idx_country_name ON public.country USING btree (name);
 
 
 --
--- TOC entry 2752 (class 1259 OID 22729)
+-- TOC entry 2756 (class 1259 OID 23343)
 -- Name: idx_department_name; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -937,7 +980,7 @@ CREATE UNIQUE INDEX idx_department_name ON public.department USING btree (name);
 
 
 --
--- TOC entry 2753 (class 1259 OID 22730)
+-- TOC entry 2757 (class 1259 OID 23344)
 -- Name: idx_department_name_location_id; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -945,7 +988,7 @@ CREATE UNIQUE INDEX idx_department_name_location_id ON public.department USING b
 
 
 --
--- TOC entry 2763 (class 1259 OID 22751)
+-- TOC entry 2767 (class 1259 OID 23365)
 -- Name: idx_employee_doc_id; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -953,7 +996,7 @@ CREATE UNIQUE INDEX idx_employee_doc_id ON public.employee USING btree (doc_id);
 
 
 --
--- TOC entry 2764 (class 1259 OID 22753)
+-- TOC entry 2768 (class 1259 OID 23367)
 -- Name: idx_employee_email; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -961,7 +1004,7 @@ CREATE UNIQUE INDEX idx_employee_email ON public.employee USING btree (email);
 
 
 --
--- TOC entry 2765 (class 1259 OID 22752)
+-- TOC entry 2769 (class 1259 OID 23366)
 -- Name: idx_employee_first_last_name; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -969,7 +1012,7 @@ CREATE UNIQUE INDEX idx_employee_first_last_name ON public.employee USING btree 
 
 
 --
--- TOC entry 2758 (class 1259 OID 22738)
+-- TOC entry 2762 (class 1259 OID 23352)
 -- Name: idx_job_name; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -977,7 +1020,15 @@ CREATE UNIQUE INDEX idx_job_name ON public.job USING btree (title);
 
 
 --
--- TOC entry 2736 (class 1259 OID 22693)
+-- TOC entry 2776 (class 1259 OID 23373)
+-- Name: idx_manager_department_id_employee_id; Type: INDEX; Schema: public; Owner: contractsappuser
+--
+
+CREATE UNIQUE INDEX idx_manager_department_id_employee_id ON public.manager USING btree (department_id, employee_id);
+
+
+--
+-- TOC entry 2740 (class 1259 OID 23307)
 -- Name: idx_persistent_audit_event; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -985,7 +1036,7 @@ CREATE INDEX idx_persistent_audit_event ON public.jhi_persistent_audit_event USI
 
 
 --
--- TOC entry 2739 (class 1259 OID 22694)
+-- TOC entry 2743 (class 1259 OID 23308)
 -- Name: idx_persistent_audit_evt_data; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -993,7 +1044,7 @@ CREATE INDEX idx_persistent_audit_evt_data ON public.jhi_persistent_audit_evt_da
 
 
 --
--- TOC entry 2724 (class 1259 OID 22662)
+-- TOC entry 2728 (class 1259 OID 23276)
 -- Name: idx_user_email; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -1001,7 +1052,7 @@ CREATE UNIQUE INDEX idx_user_email ON public.jhi_user USING btree (email);
 
 
 --
--- TOC entry 2725 (class 1259 OID 22661)
+-- TOC entry 2729 (class 1259 OID 23275)
 -- Name: idx_user_login; Type: INDEX; Schema: public; Owner: contractsappuser
 --
 
@@ -1009,7 +1060,7 @@ CREATE UNIQUE INDEX idx_user_login ON public.jhi_user USING btree (login);
 
 
 --
--- TOC entry 2772 (class 2606 OID 22673)
+-- TOC entry 2779 (class 2606 OID 23287)
 -- Name: jhi_user_authority fk_authority_name; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1018,7 +1069,7 @@ ALTER TABLE ONLY public.jhi_user_authority
 
 
 --
--- TOC entry 2775 (class 2606 OID 22754)
+-- TOC entry 2782 (class 2606 OID 23374)
 -- Name: city fk_city_country_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1027,7 +1078,7 @@ ALTER TABLE ONLY public.city
 
 
 --
--- TOC entry 2777 (class 2606 OID 22764)
+-- TOC entry 2784 (class 2606 OID 23384)
 -- Name: department fk_department_location_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1036,7 +1087,7 @@ ALTER TABLE ONLY public.department
 
 
 --
--- TOC entry 2779 (class 2606 OID 22774)
+-- TOC entry 2786 (class 2606 OID 23394)
 -- Name: employee fk_employee_department_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1045,7 +1096,7 @@ ALTER TABLE ONLY public.employee
 
 
 --
--- TOC entry 2778 (class 2606 OID 22769)
+-- TOC entry 2785 (class 2606 OID 23389)
 -- Name: employee fk_employee_job_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1054,7 +1105,7 @@ ALTER TABLE ONLY public.employee
 
 
 --
--- TOC entry 2774 (class 2606 OID 22695)
+-- TOC entry 2781 (class 2606 OID 23309)
 -- Name: jhi_persistent_audit_evt_data fk_evt_pers_audit_evt_data; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1063,7 +1114,7 @@ ALTER TABLE ONLY public.jhi_persistent_audit_evt_data
 
 
 --
--- TOC entry 2776 (class 2606 OID 22759)
+-- TOC entry 2783 (class 2606 OID 23379)
 -- Name: location fk_location_city_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1072,7 +1123,25 @@ ALTER TABLE ONLY public.location
 
 
 --
--- TOC entry 2773 (class 2606 OID 22678)
+-- TOC entry 2787 (class 2606 OID 23399)
+-- Name: manager fk_manager_department_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT fk_manager_department_id FOREIGN KEY (department_id) REFERENCES public.department(id);
+
+
+--
+-- TOC entry 2788 (class 2606 OID 23404)
+-- Name: manager fk_manager_employee_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT fk_manager_employee_id FOREIGN KEY (employee_id) REFERENCES public.employee(id);
+
+
+--
+-- TOC entry 2780 (class 2606 OID 23292)
 -- Name: jhi_user_authority fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: contractsappuser
 --
 
@@ -1080,7 +1149,7 @@ ALTER TABLE ONLY public.jhi_user_authority
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public.jhi_user(id);
 
 
--- Completed on 2018-06-27 18:25:00
+-- Completed on 2018-06-29 12:44:01
 
 --
 -- PostgreSQL database dump complete

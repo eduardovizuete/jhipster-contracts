@@ -223,3 +223,41 @@ CREATE UNIQUE INDEX idx_employee_first_last_name
     ON public.employee USING btree
     (first_name COLLATE pg_catalog."default", last_name COLLATE pg_catalog."default")
     TABLESPACE pg_default;
+
+----------------------------------------------------------------------
+
+-- Table: public.manager
+
+-- DROP TABLE public.manager;
+
+CREATE TABLE public.manager
+(
+    id bigint NOT NULL,
+    department_id bigint NOT NULL,
+    employee_id bigint NOT NULL,
+    CONSTRAINT pk_manager PRIMARY KEY (id),
+    CONSTRAINT fk_manager_department_id FOREIGN KEY (department_id)
+        REFERENCES public.department (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_manager_employee_id FOREIGN KEY (employee_id)
+        REFERENCES public.employee (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.manager
+    OWNER to contractsappuser;
+
+-- Index: idx_manager_department_id_employee_id
+
+-- DROP INDEX public.idx_manager_department_id_employee_id;
+
+CREATE UNIQUE INDEX idx_manager_department_id_employee_id
+    ON public.manager USING btree
+    (department_id, employee_id)
+    TABLESPACE pg_default;
