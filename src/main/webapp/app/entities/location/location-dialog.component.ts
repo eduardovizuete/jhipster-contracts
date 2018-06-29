@@ -33,8 +33,6 @@ export class LocationDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.cityService.query()
-            .subscribe((res: HttpResponse<City[]>) => { this.cities = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -73,6 +71,15 @@ export class LocationDialogComponent implements OnInit {
 
     trackCityById(index: number, item: City) {
         return item.id;
+    }
+
+    searchCity(event) {
+        this.cityService.queryCityByName(event.query.toLowerCase())
+            .subscribe(
+                (res: HttpResponse<City[]>) => {
+                    this.cities = res.body; },
+                (res: HttpErrorResponse) =>
+                    this.onError(res.message));
     }
 }
 
