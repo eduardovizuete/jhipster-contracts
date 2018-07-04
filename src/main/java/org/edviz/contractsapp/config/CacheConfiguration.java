@@ -38,6 +38,20 @@ public class CacheConfiguration {
             cm.createCache(org.edviz.contractsapp.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(org.edviz.contractsapp.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(org.edviz.contractsapp.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Country.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Country.class.getName() + ".cities", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.City.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.City.class.getName() + ".locations", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Location.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Location.class.getName() + ".departments", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Department.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Job.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Employee.class.getName(), jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Job.class.getName() + ".employees", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Department.class.getName() + ".employees", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Department.class.getName() + ".managers", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Employee.class.getName() + ".managers", jcacheConfiguration);
+            cm.createCache(org.edviz.contractsapp.domain.Manager.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
