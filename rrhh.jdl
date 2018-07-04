@@ -1,0 +1,69 @@
+entity Country {
+  name String required
+}
+
+entity City {
+  name String required
+}
+
+relationship ManyToOne {
+  City{country(name) required} to Country{cities}
+}
+
+entity Location {
+  streetAddress String required,
+  stateProvince String required,
+  postalCode String,
+}
+
+relationship ManyToOne {
+  Location{city(name) required} to City{locations}
+}
+
+entity Department {
+	name String required
+}
+
+relationship ManyToOne {
+  Department{location(streetAddress) required} to Location{departments}
+}
+
+entity Job {
+  title String required,
+  minSalary Long required min(0),
+  maxSalary Long required min(0)
+}
+
+entity Employee {
+  docId String required,
+  firstName String required,
+  lastName String required,
+  email String required,
+  phoneNumber String,
+  hireDate LocalDate required,
+  salary Long required min(0)
+}
+
+relationship ManyToOne {
+  Employee{job(title) required} to Job{employees}
+}
+
+relationship ManyToOne {
+  Employee{department(name) required} to Department{employees}
+}
+
+entity Manager {
+}
+
+relationship ManyToOne {
+  Manager{department(name) required} to Department{managers},
+  Manager{employee(lastName) required} to Employee{managers}
+}
+
+paginate Country with pagination
+paginate City with pagination
+paginate Location with pagination
+paginate Department with pagination
+paginate Job with pagination
+paginate Employee with pagination
+paginate Manager with pagination
