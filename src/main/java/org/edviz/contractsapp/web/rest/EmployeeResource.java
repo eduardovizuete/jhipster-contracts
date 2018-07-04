@@ -109,6 +109,38 @@ public class EmployeeResource {
     }
 
     /**
+     * GET  /employees/searchByDocId/:docId : get all the employees by "docId".
+     *
+     * @param docId the docId of the employee to retrieve
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of employees in body
+     */
+    @GetMapping("/employees/searchByDocId/{docId}")
+    @Timed
+    public ResponseEntity<List<Employee>> getAllEmployeesByDocId(@PathVariable String docId, Pageable pageable) {
+        log.debug("REST request to get a page of Employees by docId : {}", docId);
+        Page<Employee> page = employeeRepository.findByDocIdContainsIgnoreCase(docId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees/searchByDocId");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /employees/searchByName/:name : get all the employees by "docId".
+     *
+     * @param name the name of the employee to retrieve
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of employees in body
+     */
+    @GetMapping("/employees/searchByName/{name}")
+    @Timed
+    public ResponseEntity<List<Employee>> getAllEmployeesByName(@PathVariable String name, Pageable pageable) {
+        log.debug("REST request to get a page of Employees by name : {}", name);
+        Page<Employee> page = employeeRepository.findByLastNameContainsIgnoreCase(name, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees/SearchByName");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * GET  /employees/:id : get the "id" employee.
      *
      * @param id the id of the employee to retrieve

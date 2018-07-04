@@ -15,7 +15,7 @@ export class CountryService {
     private resourceUrl =  SERVER_API_URL + 'api/countries';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/countries';
 
-    private resourceSearchByNameUrl =  SERVER_API_URL + this.resourceUrl + '/searchByName';
+    private resourceSearchByNameUrl =  this.resourceUrl + '/searchByName';
 
     constructor(private http: HttpClient) { }
 

@@ -46,7 +46,7 @@
                 <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
                 <option [ngValue]="cityOption.id === location.city?.id ? location.city : cityOption" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.name}}</option>
             </select-->
-            <p-autoComplete  id="field_city" name="city" [(ngModel)]="location.city" required
+            <p-autoComplete class="form-control" id="field_city" name="city" [(ngModel)]="location.city" required
                              [suggestions]="cities"
                              (completeMethod)="searchCity($event)" field="name" [disabled]="false">
             </p-autoComplete>

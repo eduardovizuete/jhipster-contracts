@@ -37,10 +37,10 @@ export class ManagerDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.departmentService.query()
-            .subscribe((res: HttpResponse<Department[]>) => { this.departments = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.employeeService.query()
-            .subscribe((res: HttpResponse<Employee[]>) => { this.employees = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        // this.departmentService.query()
+        //     .subscribe((res: HttpResponse<Department[]>) => { this.departments = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        // this.employeeService.query()
+        //     .subscribe((res: HttpResponse<Employee[]>) => { this.employees = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -83,6 +83,33 @@ export class ManagerDialogComponent implements OnInit {
 
     trackEmployeeById(index: number, item: Employee) {
         return item.id;
+    }
+
+    searchEmployeeByDocId(event) {
+        this.employeeService.queryByDocId(event.query.toLowerCase())
+            .subscribe(
+                (res: HttpResponse<Employee[]>) => {
+                    this.employees = res.body; },
+                (res: HttpErrorResponse) =>
+                    this.onError(res.message));
+    }
+
+    searchEmployeeByName(event) {
+        this.employeeService.queryByName(event.query.toLowerCase())
+            .subscribe(
+                (res: HttpResponse<Employee[]>) => {
+                    this.employees = res.body; },
+                (res: HttpErrorResponse) =>
+                    this.onError(res.message));
+    }
+
+    searchDepartmentByName(event) {
+        this.departmentService.queryByName(event.query.toLowerCase())
+            .subscribe(
+                (res: HttpResponse<Employee[]>) => {
+                    this.departments = res.body; },
+                (res: HttpErrorResponse) =>
+                    this.onError(res.message));
     }
 }
 

@@ -110,7 +110,7 @@ public class CityResource {
 
     /**
      * GET  /cities/searchByName/:name : get all the cities by "name".
-     *
+     * @param name the name of the city to retrieve
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of cities in body
      */
@@ -119,7 +119,7 @@ public class CityResource {
     public ResponseEntity<List<City>> getAllCitiesByName(@PathVariable String name, Pageable pageable) {
         log.debug("REST request to get a page of Cities by name : {}", name);
         Page<City> page = cityRepository.findByNameContainsIgnoreCase(name, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/cities/searchByName");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities/searchByName");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

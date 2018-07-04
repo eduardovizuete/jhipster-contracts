@@ -13,6 +13,7 @@ export class DepartmentService {
 
     private resourceUrl =  SERVER_API_URL + 'api/departments';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/departments';
+    private resourceSearchByName = this.resourceUrl + '/searchByName';
 
     constructor(private http: HttpClient) { }
 
@@ -46,6 +47,12 @@ export class DepartmentService {
     search(req?: any): Observable<HttpResponse<Department[]>> {
         const options = createRequestOption(req);
         return this.http.get<Department[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Department[]>) => this.convertArrayResponse(res));
+    }
+
+    queryByName(name: string, req?: any): Observable<HttpResponse<Department[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Department[]>(`${this.resourceSearchByName}/${name}`, { params: options, observe: 'response' })
             .map((res: HttpResponse<Department[]>) => this.convertArrayResponse(res));
     }
 

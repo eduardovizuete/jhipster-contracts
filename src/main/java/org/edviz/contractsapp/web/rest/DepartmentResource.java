@@ -109,6 +109,22 @@ public class DepartmentResource {
     }
 
     /**
+     * GET  /departments/searchByName/:name : get all the departments by "name".
+     *
+     * @param name the name of the department to retrieve
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of departments in body
+     */
+    @GetMapping("/departments/searchByName/{name}")
+    @Timed
+    public ResponseEntity<List<Department>> getAllDepartmentsByName(@PathVariable String name, Pageable pageable) {
+        log.debug("REST request to get a page of Departments by name : {}", name);
+        Page<Department> page = departmentRepository.findByNameContainsIgnoreCase(name, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/departments/searchByName");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * GET  /departments/:id : get the "id" department.
      *
      * @param id the id of the department to retrieve

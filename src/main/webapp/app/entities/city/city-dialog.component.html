@@ -34,7 +34,7 @@
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="contractsApp.city.country" for="field_country">Country</label>
-            <p-autoComplete id="field_country" name="country" [(ngModel)]="city.country" required
+            <p-autoComplete class="form-control" id="field_country" name="country" [(ngModel)]="city.country" required
                          [suggestions]="countryOptions"
                          (completeMethod)="search($event)" field="name" [disabled]="false">
             </p-autoComplete>
@@ -45,7 +45,6 @@
                 </small>
             </div>
         </div>
-
         <div class="input-group-prepend">
             <span class="input-group-text" id="searchCountryTitle">Search for Country Name</span>
             <input type="text" class="form-control" placeholder="name" aria-describedby="searchCountryName" [formControl]="countryName">

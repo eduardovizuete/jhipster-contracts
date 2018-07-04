@@ -15,6 +15,8 @@ export class EmployeeService {
 
     private resourceUrl =  SERVER_API_URL + 'api/employees';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/employees';
+    private resourceSearchByDocIdUrl =  this.resourceUrl + '/searchByDocId';
+    private resourceSearchByName =  this.resourceUrl + '/searchByName';
 
     constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
 
@@ -48,6 +50,18 @@ export class EmployeeService {
     search(req?: any): Observable<HttpResponse<Employee[]>> {
         const options = createRequestOption(req);
         return this.http.get<Employee[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Employee[]>) => this.convertArrayResponse(res));
+    }
+
+    queryByDocId(docId: string, req?: any): Observable<HttpResponse<Employee[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Employee[]>(`${this.resourceSearchByDocIdUrl}/${docId}`, { params: options, observe: 'response' })
+            .map((res: HttpResponse<Employee[]>) => this.convertArrayResponse(res));
+    }
+
+    queryByName(name: string, req?: any): Observable<HttpResponse<Employee[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<Employee[]>(`${this.resourceSearchByName}/${name}`, { params: options, observe: 'response' })
             .map((res: HttpResponse<Employee[]>) => this.convertArrayResponse(res));
     }
 

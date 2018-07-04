@@ -111,6 +111,7 @@ public class CountryResource {
     /**
      * GET  /countries/searchByName/:name : get all the countries by "name".
      *
+     * @param name the name of the country to retrieve
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of countries in body
      */
@@ -119,7 +120,7 @@ public class CountryResource {
     public ResponseEntity<List<Country>> getAllCountriesByName(@PathVariable String name, Pageable pageable) {
         log.debug("REST request to get a page of Countries by name: {}", name);
         Page<Country> page = countryRepository.findByNameContainsIgnoreCase(name, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/countries/searchByName");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/countries/searchByName");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

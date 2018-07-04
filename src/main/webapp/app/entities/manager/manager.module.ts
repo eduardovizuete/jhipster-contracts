@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 import { ContractsSharedModule } from '../../shared';
 import {
@@ -24,7 +25,8 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(ENTITY_STATES),
+        AutoCompleteModule
     ],
     declarations: [
         ManagerComponent,
