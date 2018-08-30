@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "department",
+            "otherEntityName": "department",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "employee",
+            "otherEntityName": "employee",
+            "otherEntityField": "lastName"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20180628132904",
+    "entityTableName": "manager",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false
+}
