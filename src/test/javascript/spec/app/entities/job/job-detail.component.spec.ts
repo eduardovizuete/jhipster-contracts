@@ -1,54 +1,40 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { ContractsTestModule } from '../../../test.module';
-import { JobDetailComponent } from '../../../../../../main/webapp/app/entities/job/job-detail.component';
-import { JobService } from '../../../../../../main/webapp/app/entities/job/job.service';
-import { Job } from '../../../../../../main/webapp/app/entities/job/job.model';
+import { JobDetailComponent } from 'app/entities/job/job-detail.component';
+import { Job } from 'app/shared/model/job.model';
 
 describe('Component Tests', () => {
-
     describe('Job Management Detail Component', () => {
         let comp: JobDetailComponent;
         let fixture: ComponentFixture<JobDetailComponent>;
-        let service: JobService;
+        const route = ({ data: of({ job: new Job(123) }) } as any) as ActivatedRoute;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [ContractsTestModule],
                 declarations: [JobDetailComponent],
-                providers: [
-                    JobService
-                ]
+                providers: [{ provide: ActivatedRoute, useValue: route }]
             })
-            .overrideTemplate(JobDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(JobDetailComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(JobDetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(JobService);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new Job(123)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.job).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.job).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });
-
 });

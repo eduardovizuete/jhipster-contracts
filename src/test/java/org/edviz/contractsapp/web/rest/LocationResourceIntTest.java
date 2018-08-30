@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,11 +25,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
+
 
 import static org.edviz.contractsapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,8 +58,14 @@ public class LocationResourceIntTest {
     @Autowired
     private LocationRepository locationRepository;
 
+
+    /**
+     * This repository is mocked in the org.edviz.contractsapp.repository.search test package.
+     *
+     * @see org.edviz.contractsapp.repository.search.LocationSearchRepositoryMockConfiguration
+     */
     @Autowired
-    private LocationSearchRepository locationSearchRepository;
+    private LocationSearchRepository mockLocationSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -74,7 +86,7 @@ public class LocationResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LocationResource locationResource = new LocationResource(locationRepository, locationSearchRepository);
+        final LocationResource locationResource = new LocationResource(locationRepository, mockLocationSearchRepository);
         this.restLocationMockMvc = MockMvcBuilders.standaloneSetup(locationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -103,7 +115,6 @@ public class LocationResourceIntTest {
 
     @Before
     public void initTest() {
-        locationSearchRepository.deleteAll();
         location = createEntity(em);
     }
 
@@ -127,8 +138,7 @@ public class LocationResourceIntTest {
         assertThat(testLocation.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
 
         // Validate the Location in Elasticsearch
-        Location locationEs = locationSearchRepository.findOne(testLocation.getId());
-        assertThat(locationEs).isEqualToIgnoringGivenFields(testLocation);
+        verify(mockLocationSearchRepository, times(1)).save(testLocation);
     }
 
     @Test
@@ -148,6 +158,9 @@ public class LocationResourceIntTest {
         // Validate the Location in the database
         List<Location> locationList = locationRepository.findAll();
         assertThat(locationList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the Location in Elasticsearch
+        verify(mockLocationSearchRepository, times(0)).save(location);
     }
 
     @Test
@@ -201,6 +214,7 @@ public class LocationResourceIntTest {
             .andExpect(jsonPath("$.[*].stateProvince").value(hasItem(DEFAULT_STATE_PROVINCE.toString())))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE.toString())));
     }
+    
 
     @Test
     @Transactional
@@ -217,7 +231,6 @@ public class LocationResourceIntTest {
             .andExpect(jsonPath("$.stateProvince").value(DEFAULT_STATE_PROVINCE.toString()))
             .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE.toString()));
     }
-
     @Test
     @Transactional
     public void getNonExistingLocation() throws Exception {
@@ -231,11 +244,11 @@ public class LocationResourceIntTest {
     public void updateLocation() throws Exception {
         // Initialize the database
         locationRepository.saveAndFlush(location);
-        locationSearchRepository.save(location);
+
         int databaseSizeBeforeUpdate = locationRepository.findAll().size();
 
         // Update the location
-        Location updatedLocation = locationRepository.findOne(location.getId());
+        Location updatedLocation = locationRepository.findById(location.getId()).get();
         // Disconnect from session so that the updates on updatedLocation are not directly saved in db
         em.detach(updatedLocation);
         updatedLocation
@@ -257,8 +270,7 @@ public class LocationResourceIntTest {
         assertThat(testLocation.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
 
         // Validate the Location in Elasticsearch
-        Location locationEs = locationSearchRepository.findOne(testLocation.getId());
-        assertThat(locationEs).isEqualToIgnoringGivenFields(testLocation);
+        verify(mockLocationSearchRepository, times(1)).save(testLocation);
     }
 
     @Test
@@ -268,15 +280,18 @@ public class LocationResourceIntTest {
 
         // Create the Location
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         restLocationMockMvc.perform(put("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(location)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Location in the database
         List<Location> locationList = locationRepository.findAll();
-        assertThat(locationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(locationList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Location in Elasticsearch
+        verify(mockLocationSearchRepository, times(0)).save(location);
     }
 
     @Test
@@ -284,7 +299,7 @@ public class LocationResourceIntTest {
     public void deleteLocation() throws Exception {
         // Initialize the database
         locationRepository.saveAndFlush(location);
-        locationSearchRepository.save(location);
+
         int databaseSizeBeforeDelete = locationRepository.findAll().size();
 
         // Get the location
@@ -292,13 +307,12 @@ public class LocationResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate Elasticsearch is empty
-        boolean locationExistsInEs = locationSearchRepository.exists(location.getId());
-        assertThat(locationExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Location> locationList = locationRepository.findAll();
         assertThat(locationList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the Location in Elasticsearch
+        verify(mockLocationSearchRepository, times(1)).deleteById(location.getId());
     }
 
     @Test
@@ -306,8 +320,8 @@ public class LocationResourceIntTest {
     public void searchLocation() throws Exception {
         // Initialize the database
         locationRepository.saveAndFlush(location);
-        locationSearchRepository.save(location);
-
+        when(mockLocationSearchRepository.search(queryStringQuery("id:" + location.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(location), PageRequest.of(0, 1), 1));
         // Search the location
         restLocationMockMvc.perform(get("/api/_search/locations?query=id:" + location.getId()))
             .andExpect(status().isOk())

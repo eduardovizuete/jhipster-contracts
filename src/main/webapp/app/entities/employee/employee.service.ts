@@ -1,87 +1,78 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
-import { JhiDateUtils } from 'ng-jhipster';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IEmployee } from 'app/shared/model/employee.model';
 
-import { Employee } from './employee.model';
-import { createRequestOption } from '../../shared';
+type EntityResponseType = HttpResponse<IEmployee>;
+type EntityArrayResponseType = HttpResponse<IEmployee[]>;
 
-export type EntityResponseType = HttpResponse<Employee>;
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EmployeeService {
-
-    private resourceUrl =  SERVER_API_URL + 'api/employees';
+    private resourceUrl = SERVER_API_URL + 'api/employees';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/employees';
 
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
+    constructor(private http: HttpClient) {}
 
-    create(employee: Employee): Observable<EntityResponseType> {
-        const copy = this.convert(employee);
-        return this.http.post<Employee>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(employee: IEmployee): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(employee);
+        return this.http
+            .post<IEmployee>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(employee: Employee): Observable<EntityResponseType> {
-        const copy = this.convert(employee);
-        return this.http.put<Employee>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(employee: IEmployee): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(employee);
+        return this.http
+            .put<IEmployee>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<Employee>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http
+            .get<IEmployee>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<Employee[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<Employee[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<Employee[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<IEmployee[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    search(req?: any): Observable<HttpResponse<Employee[]>> {
+    search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<Employee[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<Employee[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<IEmployee[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: Employee = this.convertItemFromServer(res.body);
-        return res.clone({body});
-    }
-
-    private convertArrayResponse(res: HttpResponse<Employee[]>): HttpResponse<Employee[]> {
-        const jsonResponse: Employee[] = res.body;
-        const body: Employee[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({body});
-    }
-
-    /**
-     * Convert a returned JSON object to Employee.
-     */
-    private convertItemFromServer(employee: Employee): Employee {
-        const copy: Employee = Object.assign({}, employee);
-        copy.hireDate = this.dateUtils
-            .convertLocalDateFromServer(employee.hireDate);
+    private convertDateFromClient(employee: IEmployee): IEmployee {
+        const copy: IEmployee = Object.assign({}, employee, {
+            hireDate: employee.hireDate != null && employee.hireDate.isValid() ? employee.hireDate.format(DATE_FORMAT) : null
+        });
         return copy;
     }
 
-    /**
-     * Convert a Employee to a JSON which can be sent to the server.
-     */
-    private convert(employee: Employee): Employee {
-        const copy: Employee = Object.assign({}, employee);
-        copy.hireDate = this.dateUtils
-            .convertLocalDateToServer(employee.hireDate);
-        return copy;
+    private convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        res.body.hireDate = res.body.hireDate != null ? moment(res.body.hireDate) : null;
+        return res;
+    }
+
+    private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        res.body.forEach((employee: IEmployee) => {
+            employee.hireDate = employee.hireDate != null ? moment(employee.hireDate) : null;
+        });
+        return res;
     }
 }

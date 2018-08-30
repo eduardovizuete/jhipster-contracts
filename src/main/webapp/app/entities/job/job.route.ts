@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
-import { UserRouteAccessService } from '../../shared';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Job } from 'app/shared/model/job.model';
+import { JobService } from './job.service';
 import { JobComponent } from './job.component';
 import { JobDetailComponent } from './job-detail.component';
-import { JobPopupComponent } from './job-dialog.component';
+import { JobUpdateComponent } from './job-update.component';
 import { JobDeletePopupComponent } from './job-delete-dialog.component';
+import { IJob } from 'app/shared/model/job.model';
 
-@Injectable()
-export class JobResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+@Injectable({ providedIn: 'root' })
+export class JobResolve implements Resolve<IJob> {
+    constructor(private service: JobService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((job: HttpResponse<Job>) => job.body));
+        }
+        return of(new Job());
     }
 }
 
@@ -29,16 +31,45 @@ export const jobRoute: Routes = [
         path: 'job',
         component: JobComponent,
         resolve: {
-            'pagingParams': JobResolvePagingParams
+            pagingParams: JhiResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            defaultSort: 'id,asc',
+            pageTitle: 'contractsApp.job.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'job/:id/view',
+        component: JobDetailComponent,
+        resolve: {
+            job: JobResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.job.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }, {
-        path: 'job/:id',
-        component: JobDetailComponent,
+    },
+    {
+        path: 'job/new',
+        component: JobUpdateComponent,
+        resolve: {
+            job: JobResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'contractsApp.job.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'job/:id/edit',
+        component: JobUpdateComponent,
+        resolve: {
+            job: JobResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.job.home.title'
@@ -49,28 +80,11 @@ export const jobRoute: Routes = [
 
 export const jobPopupRoute: Routes = [
     {
-        path: 'job-new',
-        component: JobPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.job.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: 'job/:id/edit',
-        component: JobPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.job.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
         path: 'job/:id/delete',
         component: JobDeletePopupComponent,
+        resolve: {
+            job: JobResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.job.home.title'

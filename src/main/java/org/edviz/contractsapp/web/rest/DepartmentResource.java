@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.Department;
-
 import org.edviz.contractsapp.repository.DepartmentRepository;
 import org.edviz.contractsapp.repository.search.DepartmentSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class DepartmentResource {
     public ResponseEntity<Department> updateDepartment(@Valid @RequestBody Department department) throws URISyntaxException {
         log.debug("REST request to update Department : {}", department);
         if (department.getId() == null) {
-            return createDepartment(department);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Department result = departmentRepository.save(department);
         departmentSearchRepository.save(result);
@@ -118,8 +117,8 @@ public class DepartmentResource {
     @Timed
     public ResponseEntity<Department> getDepartment(@PathVariable Long id) {
         log.debug("REST request to get Department : {}", id);
-        Department department = departmentRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(department));
+        Optional<Department> department = departmentRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(department);
     }
 
     /**
@@ -132,8 +131,9 @@ public class DepartmentResource {
     @Timed
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         log.debug("REST request to delete Department : {}", id);
-        departmentRepository.delete(id);
-        departmentSearchRepository.delete(id);
+
+        departmentRepository.deleteById(id);
+        departmentSearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

@@ -1,15 +1,14 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ContractsTestModule } from '../../../test.module';
-import { CityDeleteDialogComponent } from '../../../../../../main/webapp/app/entities/city/city-delete-dialog.component';
-import { CityService } from '../../../../../../main/webapp/app/entities/city/city.service';
+import { CityDeleteDialogComponent } from 'app/entities/city/city-delete-dialog.component';
+import { CityService } from 'app/entities/city/city.service';
 
 describe('Component Tests', () => {
-
     describe('City Management Delete Component', () => {
         let comp: CityDeleteDialogComponent;
         let fixture: ComponentFixture<CityDeleteDialogComponent>;
@@ -17,19 +16,13 @@ describe('Component Tests', () => {
         let mockEventManager: any;
         let mockActiveModal: any;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [ContractsTestModule],
-                declarations: [CityDeleteDialogComponent],
-                providers: [
-                    CityService
-                ]
+                declarations: [CityDeleteDialogComponent]
             })
-            .overrideTemplate(CityDeleteDialogComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(CityDeleteDialogComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(CityDeleteDialogComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(CityService);
@@ -38,24 +31,22 @@ describe('Component Tests', () => {
         });
 
         describe('confirmDelete', () => {
-            it('Should call delete service on confirmDelete',
-                inject([],
-                    fakeAsync(() => {
-                        // GIVEN
-                        spyOn(service, 'delete').and.returnValue(Observable.of({}));
+            it('Should call delete service on confirmDelete', inject(
+                [],
+                fakeAsync(() => {
+                    // GIVEN
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
-                        // WHEN
-                        comp.confirmDelete(123);
-                        tick();
+                    // WHEN
+                    comp.confirmDelete(123);
+                    tick();
 
-                        // THEN
-                        expect(service.delete).toHaveBeenCalledWith(123);
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
-                    })
-                )
-            );
+                    // THEN
+                    expect(service.delete).toHaveBeenCalledWith(123);
+                    expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
+                    expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
+                })
+            ));
         });
     });
-
 });

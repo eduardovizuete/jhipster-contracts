@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.City;
-
 import org.edviz.contractsapp.repository.CityRepository;
 import org.edviz.contractsapp.repository.search.CitySearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class CityResource {
     public ResponseEntity<City> updateCity(@Valid @RequestBody City city) throws URISyntaxException {
         log.debug("REST request to update City : {}", city);
         if (city.getId() == null) {
-            return createCity(city);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         City result = cityRepository.save(city);
         citySearchRepository.save(result);
@@ -118,8 +117,8 @@ public class CityResource {
     @Timed
     public ResponseEntity<City> getCity(@PathVariable Long id) {
         log.debug("REST request to get City : {}", id);
-        City city = cityRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(city));
+        Optional<City> city = cityRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(city);
     }
 
     /**
@@ -132,8 +131,9 @@ public class CityResource {
     @Timed
     public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
         log.debug("REST request to delete City : {}", id);
-        cityRepository.delete(id);
-        citySearchRepository.delete(id);
+
+        cityRepository.deleteById(id);
+        citySearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

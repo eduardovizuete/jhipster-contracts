@@ -1,54 +1,40 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { ContractsTestModule } from '../../../test.module';
-import { ManagerDetailComponent } from '../../../../../../main/webapp/app/entities/manager/manager-detail.component';
-import { ManagerService } from '../../../../../../main/webapp/app/entities/manager/manager.service';
-import { Manager } from '../../../../../../main/webapp/app/entities/manager/manager.model';
+import { ManagerDetailComponent } from 'app/entities/manager/manager-detail.component';
+import { Manager } from 'app/shared/model/manager.model';
 
 describe('Component Tests', () => {
-
     describe('Manager Management Detail Component', () => {
         let comp: ManagerDetailComponent;
         let fixture: ComponentFixture<ManagerDetailComponent>;
-        let service: ManagerService;
+        const route = ({ data: of({ manager: new Manager(123) }) } as any) as ActivatedRoute;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [ContractsTestModule],
                 declarations: [ManagerDetailComponent],
-                providers: [
-                    ManagerService
-                ]
+                providers: [{ provide: ActivatedRoute, useValue: route }]
             })
-            .overrideTemplate(ManagerDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(ManagerDetailComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(ManagerDetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(ManagerService);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new Manager(123)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.manager).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.manager).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });
-
 });

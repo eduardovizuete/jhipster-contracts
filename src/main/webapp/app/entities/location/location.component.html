@@ -1,8 +1,8 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="contractsApp.location.home.title">Locations</span>
-        <button class="btn btn-primary float-right jh-create-entity create-location" [routerLink]="['/', { outlets: { popup: ['location-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-location" [routerLink]="['/location/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down"  jhiTranslate="contractsApp.location.home.createLabel">
             Create new Location
             </span>
@@ -15,10 +15,10 @@
                 <div class="input-group w-100 mt-3">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'contractsApp.location.home.search' | translate }}">
                     <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <span class="fa fa-search"></span>
+                        <fa-icon [icon]="'search'"></fa-icon>
                     </button>
                     <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
-                        <span class="fa fa-trash-o"></span>
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
                     </button>
                 </div>
             </form>
@@ -29,39 +29,37 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="streetAddress"><span jhiTranslate="contractsApp.location.streetAddress">Street Address</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="stateProvince"><span jhiTranslate="contractsApp.location.stateProvince">State Province</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="postalCode"><span jhiTranslate="contractsApp.location.postalCode">Postal Code</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="city.name"><span jhiTranslate="contractsApp.location.city">City</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="streetAddress"><span jhiTranslate="contractsApp.location.streetAddress">Street Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="stateProvince"><span jhiTranslate="contractsApp.location.stateProvince">State Province</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="postalCode"><span jhiTranslate="contractsApp.location.postalCode">Postal Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="city.name"><span jhiTranslate="contractsApp.location.city">City</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let location of locations ;trackBy: trackId">
-                <td><a [routerLink]="['../location', location.id ]">{{location.id}}</a></td>
+                <td><a [routerLink]="['/location', location.id, 'view' ]">{{location.id}}</a></td>
                 <td>{{location.streetAddress}}</td>
                 <td>{{location.stateProvince}}</td>
                 <td>{{location.postalCode}}</td>
                 <td>
                     <div *ngIf="location.city">
-                        <a [routerLink]="['../city', location.city?.id ]" >{{location.city?.name}}</a>
+                        <a [routerLink]="['../city', location.city?.id, 'view' ]" >{{location.city?.name}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../location', location.id ]"
+                                [routerLink]="['/location', location.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'location/'+ location.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/location', location.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -69,7 +67,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

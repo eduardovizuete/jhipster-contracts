@@ -1,54 +1,40 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { ContractsTestModule } from '../../../test.module';
-import { LocationDetailComponent } from '../../../../../../main/webapp/app/entities/location/location-detail.component';
-import { LocationService } from '../../../../../../main/webapp/app/entities/location/location.service';
-import { Location } from '../../../../../../main/webapp/app/entities/location/location.model';
+import { LocationDetailComponent } from 'app/entities/location/location-detail.component';
+import { Location } from 'app/shared/model/location.model';
 
 describe('Component Tests', () => {
-
     describe('Location Management Detail Component', () => {
         let comp: LocationDetailComponent;
         let fixture: ComponentFixture<LocationDetailComponent>;
-        let service: LocationService;
+        const route = ({ data: of({ location: new Location(123) }) } as any) as ActivatedRoute;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [ContractsTestModule],
                 declarations: [LocationDetailComponent],
-                providers: [
-                    LocationService
-                ]
+                providers: [{ provide: ActivatedRoute, useValue: route }]
             })
-            .overrideTemplate(LocationDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(LocationDetailComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(LocationDetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(LocationService);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new Location(123)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.location).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.location).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });
-
 });

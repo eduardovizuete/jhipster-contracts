@@ -44,7 +44,6 @@ public class Job implements Serializable {
     private Long maxSalary;
 
     @OneToMany(mappedBy = "job")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Employee> employees = new HashSet<>();
 

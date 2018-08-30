@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.Location;
-
 import org.edviz.contractsapp.repository.LocationRepository;
 import org.edviz.contractsapp.repository.search.LocationSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class LocationResource {
     public ResponseEntity<Location> updateLocation(@Valid @RequestBody Location location) throws URISyntaxException {
         log.debug("REST request to update Location : {}", location);
         if (location.getId() == null) {
-            return createLocation(location);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Location result = locationRepository.save(location);
         locationSearchRepository.save(result);
@@ -118,8 +117,8 @@ public class LocationResource {
     @Timed
     public ResponseEntity<Location> getLocation(@PathVariable Long id) {
         log.debug("REST request to get Location : {}", id);
-        Location location = locationRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(location));
+        Optional<Location> location = locationRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(location);
     }
 
     /**
@@ -132,8 +131,9 @@ public class LocationResource {
     @Timed
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         log.debug("REST request to delete Location : {}", id);
-        locationRepository.delete(id);
-        locationSearchRepository.delete(id);
+
+        locationRepository.deleteById(id);
+        locationSearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

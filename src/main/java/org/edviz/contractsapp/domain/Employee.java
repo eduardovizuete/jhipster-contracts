@@ -1,6 +1,7 @@
 package org.edviz.contractsapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -60,14 +61,15 @@ public class Employee implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("employees")
     private Job job;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("employees")
     private Department department;
 
     @OneToMany(mappedBy = "employee")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Manager> managers = new HashSet<>();
 

@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.Country;
-
 import org.edviz.contractsapp.repository.CountryRepository;
 import org.edviz.contractsapp.repository.search.CountrySearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class CountryResource {
     public ResponseEntity<Country> updateCountry(@Valid @RequestBody Country country) throws URISyntaxException {
         log.debug("REST request to update Country : {}", country);
         if (country.getId() == null) {
-            return createCountry(country);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Country result = countryRepository.save(country);
         countrySearchRepository.save(result);
@@ -118,8 +117,8 @@ public class CountryResource {
     @Timed
     public ResponseEntity<Country> getCountry(@PathVariable Long id) {
         log.debug("REST request to get Country : {}", id);
-        Country country = countryRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(country));
+        Optional<Country> country = countryRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(country);
     }
 
     /**
@@ -132,8 +131,9 @@ public class CountryResource {
     @Timed
     public ResponseEntity<Void> deleteCountry(@PathVariable Long id) {
         log.debug("REST request to delete Country : {}", id);
-        countryRepository.delete(id);
-        countrySearchRepository.delete(id);
+
+        countryRepository.deleteById(id);
+        countrySearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

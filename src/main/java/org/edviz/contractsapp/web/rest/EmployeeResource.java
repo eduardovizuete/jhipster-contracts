@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.Employee;
-
 import org.edviz.contractsapp.repository.EmployeeRepository;
 import org.edviz.contractsapp.repository.search.EmployeeSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class EmployeeResource {
     public ResponseEntity<Employee> updateEmployee(@Valid @RequestBody Employee employee) throws URISyntaxException {
         log.debug("REST request to update Employee : {}", employee);
         if (employee.getId() == null) {
-            return createEmployee(employee);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Employee result = employeeRepository.save(employee);
         employeeSearchRepository.save(result);
@@ -118,8 +117,8 @@ public class EmployeeResource {
     @Timed
     public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
         log.debug("REST request to get Employee : {}", id);
-        Employee employee = employeeRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(employee));
+        Optional<Employee> employee = employeeRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(employee);
     }
 
     /**
@@ -132,8 +131,9 @@ public class EmployeeResource {
     @Timed
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         log.debug("REST request to delete Employee : {}", id);
-        employeeRepository.delete(id);
-        employeeSearchRepository.delete(id);
+
+        employeeRepository.deleteById(id);
+        employeeSearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

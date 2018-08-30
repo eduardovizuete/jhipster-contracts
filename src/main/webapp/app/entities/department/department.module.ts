@@ -1,51 +1,29 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ContractsSharedModule } from '../../shared';
+import { ContractsSharedModule } from 'app/shared';
 import {
-    DepartmentService,
-    DepartmentPopupService,
     DepartmentComponent,
     DepartmentDetailComponent,
-    DepartmentDialogComponent,
-    DepartmentPopupComponent,
+    DepartmentUpdateComponent,
     DepartmentDeletePopupComponent,
     DepartmentDeleteDialogComponent,
     departmentRoute,
-    departmentPopupRoute,
-    DepartmentResolvePagingParams,
+    departmentPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...departmentRoute,
-    ...departmentPopupRoute,
-];
+const ENTITY_STATES = [...departmentRoute, ...departmentPopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         DepartmentComponent,
         DepartmentDetailComponent,
-        DepartmentDialogComponent,
+        DepartmentUpdateComponent,
         DepartmentDeleteDialogComponent,
-        DepartmentPopupComponent,
-        DepartmentDeletePopupComponent,
+        DepartmentDeletePopupComponent
     ],
-    entryComponents: [
-        DepartmentComponent,
-        DepartmentDialogComponent,
-        DepartmentPopupComponent,
-        DepartmentDeleteDialogComponent,
-        DepartmentDeletePopupComponent,
-    ],
-    providers: [
-        DepartmentService,
-        DepartmentPopupService,
-        DepartmentResolvePagingParams,
-    ],
+    entryComponents: [DepartmentComponent, DepartmentUpdateComponent, DepartmentDeleteDialogComponent, DepartmentDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContractsDepartmentModule {}

@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -26,11 +28,15 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
+
 
 import static org.edviz.contractsapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -67,8 +73,14 @@ public class EmployeeResourceIntTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+
+    /**
+     * This repository is mocked in the org.edviz.contractsapp.repository.search test package.
+     *
+     * @see org.edviz.contractsapp.repository.search.EmployeeSearchRepositoryMockConfiguration
+     */
     @Autowired
-    private EmployeeSearchRepository employeeSearchRepository;
+    private EmployeeSearchRepository mockEmployeeSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -89,7 +101,7 @@ public class EmployeeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EmployeeResource employeeResource = new EmployeeResource(employeeRepository, employeeSearchRepository);
+        final EmployeeResource employeeResource = new EmployeeResource(employeeRepository, mockEmployeeSearchRepository);
         this.restEmployeeMockMvc = MockMvcBuilders.standaloneSetup(employeeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -127,7 +139,6 @@ public class EmployeeResourceIntTest {
 
     @Before
     public void initTest() {
-        employeeSearchRepository.deleteAll();
         employee = createEntity(em);
     }
 
@@ -155,8 +166,7 @@ public class EmployeeResourceIntTest {
         assertThat(testEmployee.getSalary()).isEqualTo(DEFAULT_SALARY);
 
         // Validate the Employee in Elasticsearch
-        Employee employeeEs = employeeSearchRepository.findOne(testEmployee.getId());
-        assertThat(employeeEs).isEqualToIgnoringGivenFields(testEmployee);
+        verify(mockEmployeeSearchRepository, times(1)).save(testEmployee);
     }
 
     @Test
@@ -176,6 +186,9 @@ public class EmployeeResourceIntTest {
         // Validate the Employee in the database
         List<Employee> employeeList = employeeRepository.findAll();
         assertThat(employeeList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the Employee in Elasticsearch
+        verify(mockEmployeeSearchRepository, times(0)).save(employee);
     }
 
     @Test
@@ -305,6 +318,7 @@ public class EmployeeResourceIntTest {
             .andExpect(jsonPath("$.[*].hireDate").value(hasItem(DEFAULT_HIRE_DATE.toString())))
             .andExpect(jsonPath("$.[*].salary").value(hasItem(DEFAULT_SALARY.intValue())));
     }
+    
 
     @Test
     @Transactional
@@ -325,7 +339,6 @@ public class EmployeeResourceIntTest {
             .andExpect(jsonPath("$.hireDate").value(DEFAULT_HIRE_DATE.toString()))
             .andExpect(jsonPath("$.salary").value(DEFAULT_SALARY.intValue()));
     }
-
     @Test
     @Transactional
     public void getNonExistingEmployee() throws Exception {
@@ -339,11 +352,11 @@ public class EmployeeResourceIntTest {
     public void updateEmployee() throws Exception {
         // Initialize the database
         employeeRepository.saveAndFlush(employee);
-        employeeSearchRepository.save(employee);
+
         int databaseSizeBeforeUpdate = employeeRepository.findAll().size();
 
         // Update the employee
-        Employee updatedEmployee = employeeRepository.findOne(employee.getId());
+        Employee updatedEmployee = employeeRepository.findById(employee.getId()).get();
         // Disconnect from session so that the updates on updatedEmployee are not directly saved in db
         em.detach(updatedEmployee);
         updatedEmployee
@@ -373,8 +386,7 @@ public class EmployeeResourceIntTest {
         assertThat(testEmployee.getSalary()).isEqualTo(UPDATED_SALARY);
 
         // Validate the Employee in Elasticsearch
-        Employee employeeEs = employeeSearchRepository.findOne(testEmployee.getId());
-        assertThat(employeeEs).isEqualToIgnoringGivenFields(testEmployee);
+        verify(mockEmployeeSearchRepository, times(1)).save(testEmployee);
     }
 
     @Test
@@ -384,15 +396,18 @@ public class EmployeeResourceIntTest {
 
         // Create the Employee
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         restEmployeeMockMvc.perform(put("/api/employees")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(employee)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Employee in the database
         List<Employee> employeeList = employeeRepository.findAll();
-        assertThat(employeeList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(employeeList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Employee in Elasticsearch
+        verify(mockEmployeeSearchRepository, times(0)).save(employee);
     }
 
     @Test
@@ -400,7 +415,7 @@ public class EmployeeResourceIntTest {
     public void deleteEmployee() throws Exception {
         // Initialize the database
         employeeRepository.saveAndFlush(employee);
-        employeeSearchRepository.save(employee);
+
         int databaseSizeBeforeDelete = employeeRepository.findAll().size();
 
         // Get the employee
@@ -408,13 +423,12 @@ public class EmployeeResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate Elasticsearch is empty
-        boolean employeeExistsInEs = employeeSearchRepository.exists(employee.getId());
-        assertThat(employeeExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Employee> employeeList = employeeRepository.findAll();
         assertThat(employeeList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the Employee in Elasticsearch
+        verify(mockEmployeeSearchRepository, times(1)).deleteById(employee.getId());
     }
 
     @Test
@@ -422,8 +436,8 @@ public class EmployeeResourceIntTest {
     public void searchEmployee() throws Exception {
         // Initialize the database
         employeeRepository.saveAndFlush(employee);
-        employeeSearchRepository.save(employee);
-
+        when(mockEmployeeSearchRepository.search(queryStringQuery("id:" + employee.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(employee), PageRequest.of(0, 1), 1));
         // Search the employee
         restEmployeeMockMvc.perform(get("/api/_search/employees?query=id:" + employee.getId()))
             .andExpect(status().isOk())

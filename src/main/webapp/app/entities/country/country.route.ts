@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
-import { UserRouteAccessService } from '../../shared';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Country } from 'app/shared/model/country.model';
+import { CountryService } from './country.service';
 import { CountryComponent } from './country.component';
 import { CountryDetailComponent } from './country-detail.component';
-import { CountryPopupComponent } from './country-dialog.component';
+import { CountryUpdateComponent } from './country-update.component';
 import { CountryDeletePopupComponent } from './country-delete-dialog.component';
+import { ICountry } from 'app/shared/model/country.model';
 
-@Injectable()
-export class CountryResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+@Injectable({ providedIn: 'root' })
+export class CountryResolve implements Resolve<ICountry> {
+    constructor(private service: CountryService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((country: HttpResponse<Country>) => country.body));
+        }
+        return of(new Country());
     }
 }
 
@@ -29,16 +31,45 @@ export const countryRoute: Routes = [
         path: 'country',
         component: CountryComponent,
         resolve: {
-            'pagingParams': CountryResolvePagingParams
+            pagingParams: JhiResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            defaultSort: 'id,asc',
+            pageTitle: 'contractsApp.country.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'country/:id/view',
+        component: CountryDetailComponent,
+        resolve: {
+            country: CountryResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.country.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }, {
-        path: 'country/:id',
-        component: CountryDetailComponent,
+    },
+    {
+        path: 'country/new',
+        component: CountryUpdateComponent,
+        resolve: {
+            country: CountryResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'contractsApp.country.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'country/:id/edit',
+        component: CountryUpdateComponent,
+        resolve: {
+            country: CountryResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.country.home.title'
@@ -49,28 +80,11 @@ export const countryRoute: Routes = [
 
 export const countryPopupRoute: Routes = [
     {
-        path: 'country-new',
-        component: CountryPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.country.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: 'country/:id/edit',
-        component: CountryPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.country.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
         path: 'country/:id/delete',
         component: CountryDeletePopupComponent,
+        resolve: {
+            country: CountryResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.country.home.title'
