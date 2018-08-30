@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -24,11 +26,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
+
 
 import static org.edviz.contractsapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,8 +50,14 @@ public class ManagerResourceIntTest {
     @Autowired
     private ManagerRepository managerRepository;
 
+
+    /**
+     * This repository is mocked in the org.edviz.contractsapp.repository.search test package.
+     *
+     * @see org.edviz.contractsapp.repository.search.ManagerSearchRepositoryMockConfiguration
+     */
     @Autowired
-    private ManagerSearchRepository managerSearchRepository;
+    private ManagerSearchRepository mockManagerSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -66,7 +78,7 @@ public class ManagerResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ManagerResource managerResource = new ManagerResource(managerRepository, managerSearchRepository);
+        final ManagerResource managerResource = new ManagerResource(managerRepository, mockManagerSearchRepository);
         this.restManagerMockMvc = MockMvcBuilders.standaloneSetup(managerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -97,7 +109,6 @@ public class ManagerResourceIntTest {
 
     @Before
     public void initTest() {
-        managerSearchRepository.deleteAll();
         manager = createEntity(em);
     }
 
@@ -118,8 +129,7 @@ public class ManagerResourceIntTest {
         Manager testManager = managerList.get(managerList.size() - 1);
 
         // Validate the Manager in Elasticsearch
-        Manager managerEs = managerSearchRepository.findOne(testManager.getId());
-        assertThat(managerEs).isEqualToIgnoringGivenFields(testManager);
+        verify(mockManagerSearchRepository, times(1)).save(testManager);
     }
 
     @Test
@@ -139,6 +149,9 @@ public class ManagerResourceIntTest {
         // Validate the Manager in the database
         List<Manager> managerList = managerRepository.findAll();
         assertThat(managerList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the Manager in Elasticsearch
+        verify(mockManagerSearchRepository, times(0)).save(manager);
     }
 
     @Test
@@ -153,6 +166,7 @@ public class ManagerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(manager.getId().intValue())));
     }
+    
 
     @Test
     @Transactional
@@ -166,7 +180,6 @@ public class ManagerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(manager.getId().intValue()));
     }
-
     @Test
     @Transactional
     public void getNonExistingManager() throws Exception {
@@ -180,11 +193,11 @@ public class ManagerResourceIntTest {
     public void updateManager() throws Exception {
         // Initialize the database
         managerRepository.saveAndFlush(manager);
-        managerSearchRepository.save(manager);
+
         int databaseSizeBeforeUpdate = managerRepository.findAll().size();
 
         // Update the manager
-        Manager updatedManager = managerRepository.findOne(manager.getId());
+        Manager updatedManager = managerRepository.findById(manager.getId()).get();
         // Disconnect from session so that the updates on updatedManager are not directly saved in db
         em.detach(updatedManager);
 
@@ -199,8 +212,7 @@ public class ManagerResourceIntTest {
         Manager testManager = managerList.get(managerList.size() - 1);
 
         // Validate the Manager in Elasticsearch
-        Manager managerEs = managerSearchRepository.findOne(testManager.getId());
-        assertThat(managerEs).isEqualToIgnoringGivenFields(testManager);
+        verify(mockManagerSearchRepository, times(1)).save(testManager);
     }
 
     @Test
@@ -210,15 +222,18 @@ public class ManagerResourceIntTest {
 
         // Create the Manager
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         restManagerMockMvc.perform(put("/api/managers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(manager)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Manager in the database
         List<Manager> managerList = managerRepository.findAll();
-        assertThat(managerList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(managerList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Manager in Elasticsearch
+        verify(mockManagerSearchRepository, times(0)).save(manager);
     }
 
     @Test
@@ -226,7 +241,7 @@ public class ManagerResourceIntTest {
     public void deleteManager() throws Exception {
         // Initialize the database
         managerRepository.saveAndFlush(manager);
-        managerSearchRepository.save(manager);
+
         int databaseSizeBeforeDelete = managerRepository.findAll().size();
 
         // Get the manager
@@ -234,13 +249,12 @@ public class ManagerResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate Elasticsearch is empty
-        boolean managerExistsInEs = managerSearchRepository.exists(manager.getId());
-        assertThat(managerExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Manager> managerList = managerRepository.findAll();
         assertThat(managerList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the Manager in Elasticsearch
+        verify(mockManagerSearchRepository, times(1)).deleteById(manager.getId());
     }
 
     @Test
@@ -248,8 +262,8 @@ public class ManagerResourceIntTest {
     public void searchManager() throws Exception {
         // Initialize the database
         managerRepository.saveAndFlush(manager);
-        managerSearchRepository.save(manager);
-
+        when(mockManagerSearchRepository.search(queryStringQuery("id:" + manager.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(manager), PageRequest.of(0, 1), 1));
         // Search the manager
         restManagerMockMvc.perform(get("/api/_search/managers?query=id:" + manager.getId()))
             .andExpect(status().isOk())

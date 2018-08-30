@@ -1,51 +1,29 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ContractsSharedModule } from '../../shared';
+import { ContractsSharedModule } from 'app/shared';
 import {
-    EmployeeService,
-    EmployeePopupService,
     EmployeeComponent,
     EmployeeDetailComponent,
-    EmployeeDialogComponent,
-    EmployeePopupComponent,
+    EmployeeUpdateComponent,
     EmployeeDeletePopupComponent,
     EmployeeDeleteDialogComponent,
     employeeRoute,
-    employeePopupRoute,
-    EmployeeResolvePagingParams,
+    employeePopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...employeeRoute,
-    ...employeePopupRoute,
-];
+const ENTITY_STATES = [...employeeRoute, ...employeePopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         EmployeeComponent,
         EmployeeDetailComponent,
-        EmployeeDialogComponent,
+        EmployeeUpdateComponent,
         EmployeeDeleteDialogComponent,
-        EmployeePopupComponent,
-        EmployeeDeletePopupComponent,
+        EmployeeDeletePopupComponent
     ],
-    entryComponents: [
-        EmployeeComponent,
-        EmployeeDialogComponent,
-        EmployeePopupComponent,
-        EmployeeDeleteDialogComponent,
-        EmployeeDeletePopupComponent,
-    ],
-    providers: [
-        EmployeeService,
-        EmployeePopupService,
-        EmployeeResolvePagingParams,
-    ],
+    entryComponents: [EmployeeComponent, EmployeeUpdateComponent, EmployeeDeleteDialogComponent, EmployeeDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContractsEmployeeModule {}

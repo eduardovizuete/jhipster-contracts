@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -22,11 +24,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
+
 
 import static org.edviz.contractsapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,8 +57,14 @@ public class JobResourceIntTest {
     @Autowired
     private JobRepository jobRepository;
 
+
+    /**
+     * This repository is mocked in the org.edviz.contractsapp.repository.search test package.
+     *
+     * @see org.edviz.contractsapp.repository.search.JobSearchRepositoryMockConfiguration
+     */
     @Autowired
-    private JobSearchRepository jobSearchRepository;
+    private JobSearchRepository mockJobSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -73,7 +85,7 @@ public class JobResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final JobResource jobResource = new JobResource(jobRepository, jobSearchRepository);
+        final JobResource jobResource = new JobResource(jobRepository, mockJobSearchRepository);
         this.restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -97,7 +109,6 @@ public class JobResourceIntTest {
 
     @Before
     public void initTest() {
-        jobSearchRepository.deleteAll();
         job = createEntity(em);
     }
 
@@ -121,8 +132,7 @@ public class JobResourceIntTest {
         assertThat(testJob.getMaxSalary()).isEqualTo(DEFAULT_MAX_SALARY);
 
         // Validate the Job in Elasticsearch
-        Job jobEs = jobSearchRepository.findOne(testJob.getId());
-        assertThat(jobEs).isEqualToIgnoringGivenFields(testJob);
+        verify(mockJobSearchRepository, times(1)).save(testJob);
     }
 
     @Test
@@ -142,6 +152,9 @@ public class JobResourceIntTest {
         // Validate the Job in the database
         List<Job> jobList = jobRepository.findAll();
         assertThat(jobList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the Job in Elasticsearch
+        verify(mockJobSearchRepository, times(0)).save(job);
     }
 
     @Test
@@ -213,6 +226,7 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.[*].minSalary").value(hasItem(DEFAULT_MIN_SALARY.intValue())))
             .andExpect(jsonPath("$.[*].maxSalary").value(hasItem(DEFAULT_MAX_SALARY.intValue())));
     }
+    
 
     @Test
     @Transactional
@@ -229,7 +243,6 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.minSalary").value(DEFAULT_MIN_SALARY.intValue()))
             .andExpect(jsonPath("$.maxSalary").value(DEFAULT_MAX_SALARY.intValue()));
     }
-
     @Test
     @Transactional
     public void getNonExistingJob() throws Exception {
@@ -243,11 +256,11 @@ public class JobResourceIntTest {
     public void updateJob() throws Exception {
         // Initialize the database
         jobRepository.saveAndFlush(job);
-        jobSearchRepository.save(job);
+
         int databaseSizeBeforeUpdate = jobRepository.findAll().size();
 
         // Update the job
-        Job updatedJob = jobRepository.findOne(job.getId());
+        Job updatedJob = jobRepository.findById(job.getId()).get();
         // Disconnect from session so that the updates on updatedJob are not directly saved in db
         em.detach(updatedJob);
         updatedJob
@@ -269,8 +282,7 @@ public class JobResourceIntTest {
         assertThat(testJob.getMaxSalary()).isEqualTo(UPDATED_MAX_SALARY);
 
         // Validate the Job in Elasticsearch
-        Job jobEs = jobSearchRepository.findOne(testJob.getId());
-        assertThat(jobEs).isEqualToIgnoringGivenFields(testJob);
+        verify(mockJobSearchRepository, times(1)).save(testJob);
     }
 
     @Test
@@ -280,15 +292,18 @@ public class JobResourceIntTest {
 
         // Create the Job
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         restJobMockMvc.perform(put("/api/jobs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(job)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Job in the database
         List<Job> jobList = jobRepository.findAll();
-        assertThat(jobList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(jobList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the Job in Elasticsearch
+        verify(mockJobSearchRepository, times(0)).save(job);
     }
 
     @Test
@@ -296,7 +311,7 @@ public class JobResourceIntTest {
     public void deleteJob() throws Exception {
         // Initialize the database
         jobRepository.saveAndFlush(job);
-        jobSearchRepository.save(job);
+
         int databaseSizeBeforeDelete = jobRepository.findAll().size();
 
         // Get the job
@@ -304,13 +319,12 @@ public class JobResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate Elasticsearch is empty
-        boolean jobExistsInEs = jobSearchRepository.exists(job.getId());
-        assertThat(jobExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Job> jobList = jobRepository.findAll();
         assertThat(jobList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the Job in Elasticsearch
+        verify(mockJobSearchRepository, times(1)).deleteById(job.getId());
     }
 
     @Test
@@ -318,8 +332,8 @@ public class JobResourceIntTest {
     public void searchJob() throws Exception {
         // Initialize the database
         jobRepository.saveAndFlush(job);
-        jobSearchRepository.save(job);
-
+        when(mockJobSearchRepository.search(queryStringQuery("id:" + job.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(job), PageRequest.of(0, 1), 1));
         // Search the job
         restJobMockMvc.perform(get("/api/_search/jobs?query=id:" + job.getId()))
             .andExpect(status().isOk())

@@ -1,57 +1,26 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ContractsSharedModule } from '../../shared';
-
+import { ContractsSharedModule } from 'app/shared';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import {
-    CityService,
-    CityPopupService,
     CityComponent,
     CityDetailComponent,
-    CityDialogComponent,
-    CityPopupComponent,
+    CityUpdateComponent,
     CityDeletePopupComponent,
     CityDeleteDialogComponent,
     cityRoute,
-    cityPopupRoute,
-    CityResolvePagingParams,
+    cityPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...cityRoute,
-    ...cityPopupRoute,
-];
+const ENTITY_STATES = [...cityRoute, ...cityPopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES),
-        AutoCompleteModule,
-        ReactiveFormsModule,
-    ],
-    declarations: [
-        CityComponent,
-        CityDetailComponent,
-        CityDialogComponent,
-        CityDeleteDialogComponent,
-        CityPopupComponent,
-        CityDeletePopupComponent,
-    ],
-    entryComponents: [
-        CityComponent,
-        CityDialogComponent,
-        CityPopupComponent,
-        CityDeleteDialogComponent,
-        CityDeletePopupComponent,
-    ],
-    providers: [
-        CityService,
-        CityPopupService,
-        CityResolvePagingParams,
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES), AutoCompleteModule, ReactiveFormsModule],
+    declarations: [CityComponent, CityDetailComponent, CityUpdateComponent, CityDeleteDialogComponent, CityDeletePopupComponent],
+    entryComponents: [CityComponent, CityUpdateComponent, CityDeleteDialogComponent, CityDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ContractsCityModule {}
+export class ContractsCityModule {} 

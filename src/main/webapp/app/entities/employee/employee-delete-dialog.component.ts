@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { Employee } from './employee.model';
-import { EmployeePopupService } from './employee-popup.service';
+import { IEmployee } from 'app/shared/model/employee.model';
 import { EmployeeService } from './employee.service';
 
 @Component({
@@ -13,22 +12,16 @@ import { EmployeeService } from './employee.service';
     templateUrl: './employee-delete-dialog.component.html'
 })
 export class EmployeeDeleteDialogComponent {
+    employee: IEmployee;
 
-    employee: Employee;
-
-    constructor(
-        private employeeService: EmployeeService,
-        public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
-    ) {
-    }
+    constructor(private employeeService: EmployeeService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.employeeService.delete(id).subscribe((response) => {
+        this.employeeService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'employeeListModification',
                 content: 'Deleted an employee'
@@ -43,22 +36,30 @@ export class EmployeeDeleteDialogComponent {
     template: ''
 })
 export class EmployeeDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private employeePopupService: EmployeePopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.employeePopupService
-                .open(EmployeeDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ employee }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(EmployeeDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef.componentInstance.employee = employee;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

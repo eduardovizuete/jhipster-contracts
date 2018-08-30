@@ -34,7 +34,6 @@ public class Country implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "country")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<City> cities = new HashSet<>();
 

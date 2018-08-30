@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,11 +25,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
+
 
 import static org.edviz.contractsapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,8 +52,14 @@ public class CityResourceIntTest {
     @Autowired
     private CityRepository cityRepository;
 
+
+    /**
+     * This repository is mocked in the org.edviz.contractsapp.repository.search test package.
+     *
+     * @see org.edviz.contractsapp.repository.search.CitySearchRepositoryMockConfiguration
+     */
     @Autowired
-    private CitySearchRepository citySearchRepository;
+    private CitySearchRepository mockCitySearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -68,7 +80,7 @@ public class CityResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CityResource cityResource = new CityResource(cityRepository, citySearchRepository);
+        final CityResource cityResource = new CityResource(cityRepository, mockCitySearchRepository);
         this.restCityMockMvc = MockMvcBuilders.standaloneSetup(cityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -95,7 +107,6 @@ public class CityResourceIntTest {
 
     @Before
     public void initTest() {
-        citySearchRepository.deleteAll();
         city = createEntity(em);
     }
 
@@ -117,8 +128,7 @@ public class CityResourceIntTest {
         assertThat(testCity.getName()).isEqualTo(DEFAULT_NAME);
 
         // Validate the City in Elasticsearch
-        City cityEs = citySearchRepository.findOne(testCity.getId());
-        assertThat(cityEs).isEqualToIgnoringGivenFields(testCity);
+        verify(mockCitySearchRepository, times(1)).save(testCity);
     }
 
     @Test
@@ -138,6 +148,9 @@ public class CityResourceIntTest {
         // Validate the City in the database
         List<City> cityList = cityRepository.findAll();
         assertThat(cityList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the City in Elasticsearch
+        verify(mockCitySearchRepository, times(0)).save(city);
     }
 
     @Test
@@ -171,6 +184,7 @@ public class CityResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
+    
 
     @Test
     @Transactional
@@ -185,7 +199,6 @@ public class CityResourceIntTest {
             .andExpect(jsonPath("$.id").value(city.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
     }
-
     @Test
     @Transactional
     public void getNonExistingCity() throws Exception {
@@ -199,11 +212,11 @@ public class CityResourceIntTest {
     public void updateCity() throws Exception {
         // Initialize the database
         cityRepository.saveAndFlush(city);
-        citySearchRepository.save(city);
+
         int databaseSizeBeforeUpdate = cityRepository.findAll().size();
 
         // Update the city
-        City updatedCity = cityRepository.findOne(city.getId());
+        City updatedCity = cityRepository.findById(city.getId()).get();
         // Disconnect from session so that the updates on updatedCity are not directly saved in db
         em.detach(updatedCity);
         updatedCity
@@ -221,8 +234,7 @@ public class CityResourceIntTest {
         assertThat(testCity.getName()).isEqualTo(UPDATED_NAME);
 
         // Validate the City in Elasticsearch
-        City cityEs = citySearchRepository.findOne(testCity.getId());
-        assertThat(cityEs).isEqualToIgnoringGivenFields(testCity);
+        verify(mockCitySearchRepository, times(1)).save(testCity);
     }
 
     @Test
@@ -232,15 +244,18 @@ public class CityResourceIntTest {
 
         // Create the City
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         restCityMockMvc.perform(put("/api/cities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(city)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the City in the database
         List<City> cityList = cityRepository.findAll();
-        assertThat(cityList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(cityList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the City in Elasticsearch
+        verify(mockCitySearchRepository, times(0)).save(city);
     }
 
     @Test
@@ -248,7 +263,7 @@ public class CityResourceIntTest {
     public void deleteCity() throws Exception {
         // Initialize the database
         cityRepository.saveAndFlush(city);
-        citySearchRepository.save(city);
+
         int databaseSizeBeforeDelete = cityRepository.findAll().size();
 
         // Get the city
@@ -256,13 +271,12 @@ public class CityResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate Elasticsearch is empty
-        boolean cityExistsInEs = citySearchRepository.exists(city.getId());
-        assertThat(cityExistsInEs).isFalse();
-
         // Validate the database is empty
         List<City> cityList = cityRepository.findAll();
         assertThat(cityList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the City in Elasticsearch
+        verify(mockCitySearchRepository, times(1)).deleteById(city.getId());
     }
 
     @Test
@@ -270,8 +284,8 @@ public class CityResourceIntTest {
     public void searchCity() throws Exception {
         // Initialize the database
         cityRepository.saveAndFlush(city);
-        citySearchRepository.save(city);
-
+        when(mockCitySearchRepository.search(queryStringQuery("id:" + city.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(city), PageRequest.of(0, 1), 1));
         // Search the city
         restCityMockMvc.perform(get("/api/_search/cities?query=id:" + city.getId()))
             .andExpect(status().isOk())

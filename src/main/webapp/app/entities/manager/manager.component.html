@@ -1,8 +1,8 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="contractsApp.manager.home.title">Managers</span>
-        <button class="btn btn-primary float-right jh-create-entity create-manager" [routerLink]="['/', { outlets: { popup: ['manager-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-manager" [routerLink]="['/manager/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down"  jhiTranslate="contractsApp.manager.home.createLabel">
             Create new Manager
             </span>
@@ -15,10 +15,10 @@
                 <div class="input-group w-100 mt-3">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'contractsApp.manager.home.search' | translate }}">
                     <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <span class="fa fa-search"></span>
+                        <fa-icon [icon]="'search'"></fa-icon>
                     </button>
                     <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
-                        <span class="fa fa-trash-o"></span>
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
                     </button>
                 </div>
             </form>
@@ -29,24 +29,24 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="department.name"><span jhiTranslate="contractsApp.manager.department">Department</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="employee.lastName"><span jhiTranslate="contractsApp.manager.employee">Employee</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="employee.docId"><span jhiTranslate="contractsApp.employee.docId">Doc Id</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="department.name"><span jhiTranslate="contractsApp.manager.department">Department</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="employee.lastName"><span jhiTranslate="contractsApp.manager.employee">Employee</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="employee.docId"><span jhiTranslate="contractsApp.employee.docId">Doc Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let manager of managers ;trackBy: trackId">
-                <td><a [routerLink]="['../manager', manager.id ]">{{manager.id}}</a></td>
+                <td><a [routerLink]="['/manager', manager.id, 'view' ]">{{manager.id}}</a></td>
                 <td>
                     <div *ngIf="manager.department">
-                        <a [routerLink]="['../department', manager.department?.id ]" >{{manager.department?.name}}</a>
+                        <a [routerLink]="['../department', manager.department?.id, 'view' ]" >{{manager.department?.name}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="manager.employee">
-                        <a [routerLink]="['../employee', manager.employee?.id ]" >
+                        <a [routerLink]="['../employee', manager.employee?.id, 'view' ]" >
                             {{manager.employee?.lastName}}
                             {{manager.employee?.firstName}}
                         </a>
@@ -54,7 +54,7 @@
                 </td>
                 <td>
                     <div *ngIf="manager.employee">
-                        <a [routerLink]="['../employee', manager.employee?.id ]" >
+                        <a [routerLink]="['../employee', manager.employee?.id, 'view' ]" >
                             {{manager.employee?.docId}}
                         </a>
                     </div>
@@ -62,17 +62,15 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../manager', manager.id ]"
+                                [routerLink]="['/manager', manager.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'manager/'+ manager.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/manager', manager.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -80,7 +78,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

@@ -1,13 +1,12 @@
 package org.edviz.contractsapp.repository;
 
 import org.edviz.contractsapp.domain.Location;
-import org.springframework.stereotype.Repository;
-
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data JPA repository for the Location entity.
+ * Spring Data  repository for the Location entity.
  */
 @SuppressWarnings("unused")
 @Repository

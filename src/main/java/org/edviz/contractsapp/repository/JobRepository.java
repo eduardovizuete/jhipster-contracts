@@ -1,13 +1,12 @@
 package org.edviz.contractsapp.repository;
 
 import org.edviz.contractsapp.domain.Job;
-import org.springframework.stereotype.Repository;
-
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data JPA repository for the Job entity.
+ * Spring Data  repository for the Job entity.
  */
 @SuppressWarnings("unused")
 @Repository

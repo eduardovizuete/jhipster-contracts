@@ -2,7 +2,6 @@ package org.edviz.contractsapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.edviz.contractsapp.domain.Manager;
-
 import org.edviz.contractsapp.repository.ManagerRepository;
 import org.edviz.contractsapp.repository.search.ManagerSearchRepository;
 import org.edviz.contractsapp.web.rest.errors.BadRequestAlertException;
@@ -84,7 +83,7 @@ public class ManagerResource {
     public ResponseEntity<Manager> updateManager(@Valid @RequestBody Manager manager) throws URISyntaxException {
         log.debug("REST request to update Manager : {}", manager);
         if (manager.getId() == null) {
-            return createManager(manager);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Manager result = managerRepository.save(manager);
         managerSearchRepository.save(result);
@@ -118,8 +117,8 @@ public class ManagerResource {
     @Timed
     public ResponseEntity<Manager> getManager(@PathVariable Long id) {
         log.debug("REST request to get Manager : {}", id);
-        Manager manager = managerRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(manager));
+        Optional<Manager> manager = managerRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(manager);
     }
 
     /**
@@ -132,8 +131,9 @@ public class ManagerResource {
     @Timed
     public ResponseEntity<Void> deleteManager(@PathVariable Long id) {
         log.debug("REST request to delete Manager : {}", id);
-        managerRepository.delete(id);
-        managerSearchRepository.delete(id);
+
+        managerRepository.deleteById(id);
+        managerSearchRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

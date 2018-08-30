@@ -1,55 +1,31 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ContractsSharedModule } from '../../shared';
+import { ContractsSharedModule } from 'app/shared';
 
 import { AutoCompleteModule } from 'primeng/autocomplete';
-
 import {
-    LocationService,
-    LocationPopupService,
     LocationComponent,
     LocationDetailComponent,
-    LocationDialogComponent,
-    LocationPopupComponent,
+    LocationUpdateComponent,
     LocationDeletePopupComponent,
     LocationDeleteDialogComponent,
     locationRoute,
-    locationPopupRoute,
-    LocationResolvePagingParams,
+    locationPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...locationRoute,
-    ...locationPopupRoute,
-];
+const ENTITY_STATES = [...locationRoute, ...locationPopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES),
-        AutoCompleteModule
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES), AutoCompleteModule],
     declarations: [
         LocationComponent,
         LocationDetailComponent,
-        LocationDialogComponent,
+        LocationUpdateComponent,
         LocationDeleteDialogComponent,
-        LocationPopupComponent,
-        LocationDeletePopupComponent,
+        LocationDeletePopupComponent
     ],
-    entryComponents: [
-        LocationComponent,
-        LocationDialogComponent,
-        LocationPopupComponent,
-        LocationDeleteDialogComponent,
-        LocationDeletePopupComponent,
-    ],
-    providers: [
-        LocationService,
-        LocationPopupService,
-        LocationResolvePagingParams,
-    ],
+    entryComponents: [LocationComponent, LocationUpdateComponent, LocationDeleteDialogComponent, LocationDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContractsLocationModule {}

@@ -2,52 +2,29 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
-import { ContractsSharedModule } from '../../shared';
+import { ContractsSharedModule } from 'app/shared';
 import {
-    ManagerService,
-    ManagerPopupService,
     ManagerComponent,
     ManagerDetailComponent,
-    ManagerDialogComponent,
-    ManagerPopupComponent,
+    ManagerUpdateComponent,
     ManagerDeletePopupComponent,
     ManagerDeleteDialogComponent,
     managerRoute,
-    managerPopupRoute,
-    ManagerResolvePagingParams,
+    managerPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...managerRoute,
-    ...managerPopupRoute,
-];
+const ENTITY_STATES = [...managerRoute, ...managerPopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES),
-        AutoCompleteModule
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES), AutoCompleteModule],
     declarations: [
         ManagerComponent,
         ManagerDetailComponent,
-        ManagerDialogComponent,
+        ManagerUpdateComponent,
         ManagerDeleteDialogComponent,
-        ManagerPopupComponent,
-        ManagerDeletePopupComponent,
+        ManagerDeletePopupComponent
     ],
-    entryComponents: [
-        ManagerComponent,
-        ManagerDialogComponent,
-        ManagerPopupComponent,
-        ManagerDeleteDialogComponent,
-        ManagerDeletePopupComponent,
-    ],
-    providers: [
-        ManagerService,
-        ManagerPopupService,
-        ManagerResolvePagingParams,
-    ],
+    entryComponents: [ManagerComponent, ManagerUpdateComponent, ManagerDeleteDialogComponent, ManagerDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContractsManagerModule {}

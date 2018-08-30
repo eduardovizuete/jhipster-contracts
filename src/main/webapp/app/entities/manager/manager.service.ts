@@ -1,81 +1,44 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
 
-import { Manager } from './manager.model';
-import { createRequestOption } from '../../shared';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IManager } from 'app/shared/model/manager.model';
 
-export type EntityResponseType = HttpResponse<Manager>;
+type EntityResponseType = HttpResponse<IManager>;
+type EntityArrayResponseType = HttpResponse<IManager[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ManagerService {
-
-    private resourceUrl =  SERVER_API_URL + 'api/managers';
+    private resourceUrl = SERVER_API_URL + 'api/managers';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/managers';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
-    create(manager: Manager): Observable<EntityResponseType> {
-        const copy = this.convert(manager);
-        return this.http.post<Manager>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(manager: IManager): Observable<EntityResponseType> {
+        return this.http.post<IManager>(this.resourceUrl, manager, { observe: 'response' });
     }
 
-    update(manager: Manager): Observable<EntityResponseType> {
-        const copy = this.convert(manager);
-        return this.http.put<Manager>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(manager: IManager): Observable<EntityResponseType> {
+        return this.http.put<IManager>(this.resourceUrl, manager, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<Manager>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.get<IManager>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    query(req?: any): Observable<HttpResponse<Manager[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<Manager[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<Manager[]>) => this.convertArrayResponse(res));
+        return this.http.get<IManager[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    search(req?: any): Observable<HttpResponse<Manager[]>> {
+    search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<Manager[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<Manager[]>) => this.convertArrayResponse(res));
-    }
-
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: Manager = this.convertItemFromServer(res.body);
-        return res.clone({body});
-    }
-
-    private convertArrayResponse(res: HttpResponse<Manager[]>): HttpResponse<Manager[]> {
-        const jsonResponse: Manager[] = res.body;
-        const body: Manager[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({body});
-    }
-
-    /**
-     * Convert a returned JSON object to Manager.
-     */
-    private convertItemFromServer(manager: Manager): Manager {
-        const copy: Manager = Object.assign({}, manager);
-        return copy;
-    }
-
-    /**
-     * Convert a Manager to a JSON which can be sent to the server.
-     */
-    private convert(manager: Manager): Manager {
-        const copy: Manager = Object.assign({}, manager);
-        return copy;
+        return this.http.get<IManager[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
     }
 }

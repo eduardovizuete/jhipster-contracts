@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
-import { UserRouteAccessService } from '../../shared';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { City } from 'app/shared/model/city.model';
+import { CityService } from './city.service';
 import { CityComponent } from './city.component';
 import { CityDetailComponent } from './city-detail.component';
-import { CityPopupComponent } from './city-dialog.component';
+import { CityUpdateComponent } from './city-update.component';
 import { CityDeletePopupComponent } from './city-delete-dialog.component';
+import { ICity } from 'app/shared/model/city.model';
 
-@Injectable()
-export class CityResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+@Injectable({ providedIn: 'root' })
+export class CityResolve implements Resolve<ICity> {
+    constructor(private service: CityService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((city: HttpResponse<City>) => city.body));
+        }
+        return of(new City());
     }
 }
 
@@ -29,16 +31,45 @@ export const cityRoute: Routes = [
         path: 'city',
         component: CityComponent,
         resolve: {
-            'pagingParams': CityResolvePagingParams
+            pagingParams: JhiResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            defaultSort: 'id,asc',
+            pageTitle: 'contractsApp.city.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'city/:id/view',
+        component: CityDetailComponent,
+        resolve: {
+            city: CityResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.city.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }, {
-        path: 'city/:id',
-        component: CityDetailComponent,
+    },
+    {
+        path: 'city/new',
+        component: CityUpdateComponent,
+        resolve: {
+            city: CityResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'contractsApp.city.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'city/:id/edit',
+        component: CityUpdateComponent,
+        resolve: {
+            city: CityResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.city.home.title'
@@ -49,28 +80,11 @@ export const cityRoute: Routes = [
 
 export const cityPopupRoute: Routes = [
     {
-        path: 'city-new',
-        component: CityPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.city.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: 'city/:id/edit',
-        component: CityPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.city.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
         path: 'city/:id/delete',
         component: CityDeletePopupComponent,
+        resolve: {
+            city: CityResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.city.home.title'

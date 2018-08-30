@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { City } from './city.model';
-import { CityPopupService } from './city-popup.service';
+import { ICity } from 'app/shared/model/city.model';
 import { CityService } from './city.service';
 
 @Component({
@@ -13,22 +12,16 @@ import { CityService } from './city.service';
     templateUrl: './city-delete-dialog.component.html'
 })
 export class CityDeleteDialogComponent {
+    city: ICity;
 
-    city: City;
-
-    constructor(
-        private cityService: CityService,
-        public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
-    ) {
-    }
+    constructor(private cityService: CityService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.cityService.delete(id).subscribe((response) => {
+        this.cityService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'cityListModification',
                 content: 'Deleted an city'
@@ -43,22 +36,30 @@ export class CityDeleteDialogComponent {
     template: ''
 })
 export class CityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private cityPopupService: CityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.cityPopupService
-                .open(CityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ city }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(CityDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef.componentInstance.city = city;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

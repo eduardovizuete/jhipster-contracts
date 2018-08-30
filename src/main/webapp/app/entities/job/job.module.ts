@@ -1,51 +1,23 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ContractsSharedModule } from '../../shared';
+import { ContractsSharedModule } from 'app/shared';
 import {
-    JobService,
-    JobPopupService,
     JobComponent,
     JobDetailComponent,
-    JobDialogComponent,
-    JobPopupComponent,
+    JobUpdateComponent,
     JobDeletePopupComponent,
     JobDeleteDialogComponent,
     jobRoute,
-    jobPopupRoute,
-    JobResolvePagingParams,
+    jobPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...jobRoute,
-    ...jobPopupRoute,
-];
+const ENTITY_STATES = [...jobRoute, ...jobPopupRoute];
 
 @NgModule({
-    imports: [
-        ContractsSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
-    declarations: [
-        JobComponent,
-        JobDetailComponent,
-        JobDialogComponent,
-        JobDeleteDialogComponent,
-        JobPopupComponent,
-        JobDeletePopupComponent,
-    ],
-    entryComponents: [
-        JobComponent,
-        JobDialogComponent,
-        JobPopupComponent,
-        JobDeleteDialogComponent,
-        JobDeletePopupComponent,
-    ],
-    providers: [
-        JobService,
-        JobPopupService,
-        JobResolvePagingParams,
-    ],
+    imports: [ContractsSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    declarations: [JobComponent, JobDetailComponent, JobUpdateComponent, JobDeleteDialogComponent, JobDeletePopupComponent],
+    entryComponents: [JobComponent, JobUpdateComponent, JobDeleteDialogComponent, JobDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContractsJobModule {}

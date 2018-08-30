@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
-import { UserRouteAccessService } from '../../shared';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Manager } from 'app/shared/model/manager.model';
+import { ManagerService } from './manager.service';
 import { ManagerComponent } from './manager.component';
 import { ManagerDetailComponent } from './manager-detail.component';
-import { ManagerPopupComponent } from './manager-dialog.component';
+import { ManagerUpdateComponent } from './manager-update.component';
 import { ManagerDeletePopupComponent } from './manager-delete-dialog.component';
+import { IManager } from 'app/shared/model/manager.model';
 
-@Injectable()
-export class ManagerResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+@Injectable({ providedIn: 'root' })
+export class ManagerResolve implements Resolve<IManager> {
+    constructor(private service: ManagerService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((manager: HttpResponse<Manager>) => manager.body));
+        }
+        return of(new Manager());
     }
 }
 
@@ -29,16 +31,45 @@ export const managerRoute: Routes = [
         path: 'manager',
         component: ManagerComponent,
         resolve: {
-            'pagingParams': ManagerResolvePagingParams
+            pagingParams: JhiResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            defaultSort: 'id,asc',
+            pageTitle: 'contractsApp.manager.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'manager/:id/view',
+        component: ManagerDetailComponent,
+        resolve: {
+            manager: ManagerResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.manager.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }, {
-        path: 'manager/:id',
-        component: ManagerDetailComponent,
+    },
+    {
+        path: 'manager/new',
+        component: ManagerUpdateComponent,
+        resolve: {
+            manager: ManagerResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'contractsApp.manager.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'manager/:id/edit',
+        component: ManagerUpdateComponent,
+        resolve: {
+            manager: ManagerResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.manager.home.title'
@@ -49,28 +80,11 @@ export const managerRoute: Routes = [
 
 export const managerPopupRoute: Routes = [
     {
-        path: 'manager-new',
-        component: ManagerPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.manager.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: 'manager/:id/edit',
-        component: ManagerPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.manager.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
         path: 'manager/:id/delete',
         component: ManagerDeletePopupComponent,
+        resolve: {
+            manager: ManagerResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.manager.home.title'

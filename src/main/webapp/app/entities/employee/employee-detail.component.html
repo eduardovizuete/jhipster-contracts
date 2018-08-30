@@ -1,62 +1,63 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="employee">
+            <h2><span jhiTranslate="contractsApp.employee.detail.title">Employee</span> {{employee.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="contractsApp.employee.docId">Doc Id</span></dt>
+                <dd>
+                    <span>{{employee.docId}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{employee.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{employee.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.email">Email</span></dt>
+                <dd>
+                    <span>{{employee.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{employee.phoneNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.hireDate">Hire Date</span></dt>
+                <dd>
+                    <span>{{employee.hireDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.salary">Salary</span></dt>
+                <dd>
+                    <span>{{employee.salary}}</span>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.job">Job</span></dt>
+                <dd>
+                    <div *ngIf="employee.job">
+                        <a [routerLink]="['/job', employee.job?.id, 'view']">{{employee.job?.title}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="contractsApp.employee.department">Department</span></dt>
+                <dd>
+                    <div *ngIf="employee.department">
+                        <a [routerLink]="['/department', employee.department?.id, 'view']">{{employee.department?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
 
-<div *ngIf="employee">
-    <h2><span jhiTranslate="contractsApp.employee.detail.title">Employee</span> {{employee.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="contractsApp.employee.docId">Doc Id</span></dt>
-        <dd>
-            <span>{{employee.docId}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.firstName">First Name</span></dt>
-        <dd>
-            <span>{{employee.firstName}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.lastName">Last Name</span></dt>
-        <dd>
-            <span>{{employee.lastName}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.email">Email</span></dt>
-        <dd>
-            <span>{{employee.email}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.phoneNumber">Phone Number</span></dt>
-        <dd>
-            <span>{{employee.phoneNumber}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.hireDate">Hire Date</span></dt>
-        <dd>
-            <span>{{employee.hireDate | date:'mediumDate'}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.salary">Salary</span></dt>
-        <dd>
-            <span>{{employee.salary}}</span>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.job">Job</span></dt>
-        <dd>
-            <div *ngIf="employee.job">
-                <a [routerLink]="['/job', employee.job?.id]">{{employee.job?.title}}</a>
-            </div>
-        </dd>
-        <dt><span jhiTranslate="contractsApp.employee.department">Department</span></dt>
-        <dd>
-            <div *ngIf="employee.department">
-                <a [routerLink]="['/department', employee.department?.id]">{{employee.department?.name}}</a>
-            </div>
-        </dd>
-    </dl>
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'employee/'+ employee.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <button type="button"
+                    [routerLink]="['/employee', employee.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
 </div>

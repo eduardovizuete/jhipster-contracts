@@ -1,54 +1,40 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { ContractsTestModule } from '../../../test.module';
-import { EmployeeDetailComponent } from '../../../../../../main/webapp/app/entities/employee/employee-detail.component';
-import { EmployeeService } from '../../../../../../main/webapp/app/entities/employee/employee.service';
-import { Employee } from '../../../../../../main/webapp/app/entities/employee/employee.model';
+import { EmployeeDetailComponent } from 'app/entities/employee/employee-detail.component';
+import { Employee } from 'app/shared/model/employee.model';
 
 describe('Component Tests', () => {
-
     describe('Employee Management Detail Component', () => {
         let comp: EmployeeDetailComponent;
         let fixture: ComponentFixture<EmployeeDetailComponent>;
-        let service: EmployeeService;
+        const route = ({ data: of({ employee: new Employee(123) }) } as any) as ActivatedRoute;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [ContractsTestModule],
                 declarations: [EmployeeDetailComponent],
-                providers: [
-                    EmployeeService
-                ]
+                providers: [{ provide: ActivatedRoute, useValue: route }]
             })
-            .overrideTemplate(EmployeeDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(EmployeeDetailComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(EmployeeDetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(EmployeeService);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new Employee(123)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.employee).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.employee).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });
-
 });

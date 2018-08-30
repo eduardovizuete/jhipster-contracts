@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
-import { UserRouteAccessService } from '../../shared';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Location } from 'app/shared/model/location.model';
+import { LocationService } from './location.service';
 import { LocationComponent } from './location.component';
 import { LocationDetailComponent } from './location-detail.component';
-import { LocationPopupComponent } from './location-dialog.component';
+import { LocationUpdateComponent } from './location-update.component';
 import { LocationDeletePopupComponent } from './location-delete-dialog.component';
+import { ILocation } from 'app/shared/model/location.model';
 
-@Injectable()
-export class LocationResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+@Injectable({ providedIn: 'root' })
+export class LocationResolve implements Resolve<ILocation> {
+    constructor(private service: LocationService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
+        const id = route.params['id'] ? route.params['id'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((location: HttpResponse<Location>) => location.body));
+        }
+        return of(new Location());
     }
 }
 
@@ -29,16 +31,45 @@ export const locationRoute: Routes = [
         path: 'location',
         component: LocationComponent,
         resolve: {
-            'pagingParams': LocationResolvePagingParams
+            pagingParams: JhiResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            defaultSort: 'id,asc',
+            pageTitle: 'contractsApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'location/:id/view',
+        component: LocationDetailComponent,
+        resolve: {
+            location: LocationResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.location.home.title'
         },
         canActivate: [UserRouteAccessService]
-    }, {
-        path: 'location/:id',
-        component: LocationDetailComponent,
+    },
+    {
+        path: 'location/new',
+        component: LocationUpdateComponent,
+        resolve: {
+            location: LocationResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'contractsApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'location/:id/edit',
+        component: LocationUpdateComponent,
+        resolve: {
+            location: LocationResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.location.home.title'
@@ -49,28 +80,11 @@ export const locationRoute: Routes = [
 
 export const locationPopupRoute: Routes = [
     {
-        path: 'location-new',
-        component: LocationPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.location.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: 'location/:id/edit',
-        component: LocationPopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'contractsApp.location.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
         path: 'location/:id/delete',
         component: LocationDeletePopupComponent,
+        resolve: {
+            location: LocationResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'contractsApp.location.home.title'
