@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/catch';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
 import { ICountry } from 'app/shared/model/country.model';
 import { createRequestOption } from '../../shared';
 import { MAX_PAGE_SIZE } from '../../shared';
@@ -17,7 +16,7 @@ export class CountryService {
     private resourceUrl = SERVER_API_URL + 'api/countries';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/countries';
 
-    private resourceSearchByNameUrl =  this.resourceUrl + '/searchByName';
+    private resourceSearchByNameUrl = this.resourceUrl + '/searchByName';
 
     constructor(private http: HttpClient) {}
 

@@ -63,14 +63,14 @@ export class EmployeeService {
         const options = createRequestOption(req);
         return this.http
             .get<IEmployee[]>(`${this.resourceSearchByDocIdUrl}/${docId}`, { params: options, observe: 'response' })
-            .map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res));
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     queryByName(name: string, req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
             .get<IEmployee[]>(`${this.resourceSearchByName}/${name}`, { params: options, observe: 'response' })
-            .map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res));
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     private convertDateFromClient(employee: IEmployee): IEmployee {

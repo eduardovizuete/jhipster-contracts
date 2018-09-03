@@ -37,13 +37,13 @@
                         [(ngModel)]="location.postalCode" />
                 </div>
 
-                <div class="form-group">
+                <div class="ui-fluid">
                     <label class="form-control-label" jhiTranslate="contractsApp.location.city" for="field_city">City</label>
                     <!--select class="form-control" id="field_city" name="city" [(ngModel)]="location.city"  required>
                         <option *ngIf="!editForm.value.city" [ngValue]="null" selected></option>
                         <option [ngValue]="cityOption.id === location.city?.id ? location.city : cityOption" *ngFor="let cityOption of cities; trackBy: trackCityById">{{cityOption.name}}</option>
                     </select-->
-					<p-autoComplete class="form-control" id="field_city" name="city" [(ngModel)]="location.city" required
+					<p-autoComplete id="field_city" name="city" [(ngModel)]="location.city" required
                         [suggestions]="cities"
                         (completeMethod)="searchCity($event)" field="name" [disabled]="false">
                     </p-autoComplete>
@@ -55,6 +55,7 @@
 	                </div>
 				</div>
             </div>
+            <br/>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
