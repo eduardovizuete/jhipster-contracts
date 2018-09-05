@@ -18,7 +18,9 @@ import {
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
-    JhiDocsComponent
+    JhiDocsComponent,
+    ElasticsearchReindexComponent,
+    ElasticsearchReindexModalComponent
 } from './';
 
 @NgModule({
@@ -39,7 +41,9 @@ import {
         JhiHealthModalComponent,
         JhiDocsComponent,
         JhiMetricsMonitoringComponent,
-        JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringModalComponent,
+        ElasticsearchReindexComponent,
+        ElasticsearchReindexModalComponent
     ],
     entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
